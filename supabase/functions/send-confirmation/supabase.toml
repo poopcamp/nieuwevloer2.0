@@ -1,0 +1,4 @@
+
+[functions.send-confirmation]
+name = "send-confirmation"
+verify_jwt = false

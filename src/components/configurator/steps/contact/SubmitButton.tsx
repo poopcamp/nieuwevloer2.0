@@ -1,0 +1,35 @@
+
+import React from 'react';
+import { Button } from '@/components/ui/button';
+import { Loader2 } from 'lucide-react';
+
+interface SubmitButtonProps {
+  isSubmitting: boolean;
+  buttonText: string;
+  submittingText: string;
+}
+
+const SubmitButton: React.FC<SubmitButtonProps> = ({ 
+  isSubmitting, 
+  buttonText, 
+  submittingText 
+}) => {
+  return (
+    <Button 
+      type="submit" 
+      className="w-full" 
+      disabled={isSubmitting}
+    >
+      {isSubmitting ? (
+        <>
+          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          {submittingText}
+        </>
+      ) : (
+        buttonText
+      )}
+    </Button>
+  );
+};
+
+export default SubmitButton;

@@ -1,0 +1,15 @@
+
+User-agent: *
+Allow: /
+
+# Allow all bots to index main content
+User-agent: Googlebot
+Allow: /
+Allow: /locaties/
+
+User-agent: Bingbot
+Allow: /
+Allow: /locaties/
+
+Sitemap: https://nieuwevloer.be/sitemap.xml
+

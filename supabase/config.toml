@@ -1,0 +1,24 @@
+
+# This is technically a set of redirects applied to API Gateway if `project_id` is included, but it's a bit more than that.
+# All environments with Auth enabled need a mandatory JWT verifier on all routes.
+# API Gateway runs an authorizer that's hardcoded to look up the JWKS from the corresponding internal Auth service.
+# By including `project_id` here, we're making a decision that this Edge Function requires a valid JWT from the project in the URL.
+# Keep the first line!
+project_id = "ssvgnlbzztxobvilucvk"
+
+[build]
+builder = "supabase/functions-js"
+command = ""
+
+[deploy]
+release_channel = "production"
+allowed_imports = ["https://esm.sh/*", "https://deno.land/std@0.190.0/*"]
+
+[env.logic]
+JWT_SECRET_KEY = "jwt-key-used-by-supabase"
+
+[functions.send-confirmation]
+verify_jwt = false
+
+[functions.send-extended-calculator-confirmation]
+verify_jwt = false
