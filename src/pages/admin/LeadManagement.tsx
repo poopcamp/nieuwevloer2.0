@@ -25,7 +25,6 @@ const LeadManagementPage = () => {
     dialogOpen,
     setDialogOpen,
     isSending,
-    ntConfigured,
     fetchLeads,
     handleViewLead,
     handleSendFollowUp,
@@ -46,13 +45,14 @@ const LeadManagementPage = () => {
         <div>
           <h1 className="text-xl font-bold sm:text-2xl">{title}</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Echte aanvragen uit de API. Status: nieuw, gecontacteerd, offerte, gewonnen, verloren.
-            {" "}
-            <Link to="/admin/nieuwterras" className="underline underline-offset-2">
-              NieuwTerras-overzicht
-            </Link>
-            {!ntConfigured && scope !== "nv" && (
-              <> · NT-rijen hier via bron/project; volledige NT-lijst via HS-contract.</>
+            Filter op merk en status. Geen testdata.
+            {scope !== "nv" && (
+              <>
+                {" "}
+                <Link to="/admin/nieuwterras" className="underline underline-offset-2">
+                  NieuwTerras-overzicht
+                </Link>
+              </>
             )}
           </p>
         </div>

@@ -118,13 +118,14 @@ Allow CORS from the NV admin origin. Then set `VITE_NIEUWTERRAS_ADMIN_API` + `VI
 
 ## Home Server deploy
 
-This repo **is** the live admin SPA (not prestige-driveways).
+This repo **is** the live admin SPA.
 
-1. Set `VITE_SUPABASE_ANON_KEY` (required). Optional NT vars above.
-2. `npm ci --legacy-peer-deps && npm run build`
-3. Sync `dist/` → `/mnt/TheLord/Nieuwevloer/nieuwevloer/live/dist`
-4. SPA fallback to `index.html` for `/admin`, `/admin/login`, `/admin/leads`, `/admin/nieuwterras`
-5. Keep `/auth/v1/*` and `/rest/v1/*` on `api.nieuwevloer.be`
+```
+npm ci --legacy-peer-deps && npm run build
+# sync dist/ → /mnt/TheLord/Nieuwevloer/nieuwevloer/live/dist
+```
+
+SPA fallback to `index.html` for `/admin`, `/admin/login`, `/admin/leads`, `/admin/nieuwterras`.
 
 ## Contact
 

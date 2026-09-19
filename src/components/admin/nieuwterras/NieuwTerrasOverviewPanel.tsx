@@ -120,21 +120,13 @@ const NieuwTerrasOverviewPanel = ({ data, loading, compact = false }: NieuwTerra
             <p className="text-xs text-red-700">{data.errors.join(" · ")}</p>
           ) : null}
 
-          {data?.contractNeeded && (
+          {data?.contractNeeded && !compact && (
             <div className="rounded-xl border border-dashed border-[#5F7D62]/40 bg-white px-4 py-3 text-sm text-stone-600 dark:bg-stone-950">
-              <p className="font-medium text-[#1E2422] dark:text-stone-100">HS-datacontract (nieuwterras-web)</p>
+              <p className="font-medium text-[#1E2422] dark:text-stone-100">Nog geen NT-lijst gekoppeld</p>
               <p className="mt-1">
-                Live NT-admin is cookie-login op nieuwterras.be/admin (POST /admin/login). Offertes komen
-                binnen via POST /api/offerte (naam, email, telefoon, gemeente, oppervlakte, bericht).
-                Er is vandaag geen publieke GET-lijst. Voor dit paneel: voeg
-                <code className="mx-1 rounded bg-stone-100 px-1">GET /api/admin/overview</code>
-                toe (Bearer of X-Admin-Token) en zet
-                <code className="mx-1 rounded bg-stone-100 px-1">VITE_NIEUWTERRAS_ADMIN_API</code>
-                +
-                <code className="mx-1 rounded bg-stone-100 px-1">VITE_NIEUWTERRAS_ADMIN_TOKEN</code>
-                bij de NV-build. CORS toestaan vanaf nieuwevloer.be. Tot die tijd toont dit paneel NT-rijen
-                uit api.nieuwevloer.be <code className="rounded bg-stone-100 px-1">leads</code> als die bron/project
-                terras is.
+                Dit paneel toont echte offertes zodra ze in api.nieuwevloer.be staan (bron/project terras)
+                of via <code className="rounded bg-stone-100 px-1">VITE_NIEUWTERRAS_ADMIN_API</code> op de
+                Home Server. Zie README voor het GET-contract.
               </p>
             </div>
           )}
