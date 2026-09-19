@@ -3,37 +3,34 @@ import { useEffect, useMemo, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/auth-context";
-import { useBrandScope } from "@/contexts/brand-context";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import StatsCards from "@/components/admin/dashboard/StatsCards";
 import LeadsChart from "@/components/admin/dashboard/LeadsChart";
-import RecentLeadsCard from "@/components/admin/dashboard/RecentLeadsCard";
 import QuickActionsSection from "@/components/admin/dashboard/quickActions/QuickActionsSection";
-import BrandScopeTabs from "@/components/admin/BrandScopeTabs";
+import NieuwTerrasOverviewPanel from "@/components/admin/nieuwterras/NieuwTerrasOverviewPanel";
 import { BRANDS } from "@/config/brands";
-import { AUTH_API_URL } from "@/integrations/supabase/client";
-import { isNieuwTerrasApiConfigured } from "@/integrations/nieuwterras/client";
+import { fetchAllLeads, weeklyLeadCounts, type LeadFetchResult } from "@/services/leads/leadService";
 import {
-  fetchAllLeads,
-  filterLeadsByScope,
-  weeklyLeadCounts,
-  type LeadFetchResult,
-} from "@/services/leads/leadService";
-import { LEAD_STATUSES, statusLabel } from "@/components/admin/lead-management/types";
+  fetchNieuwTerrasOverview,
+  type NtOverview,
+} from "@/services/leads/nieuwterrasOverview";
+import { LEAD_STATUSES, statusColor, statusLabel } from "@/components/admin/lead-management/types";
 
 const AdminDashboard = () => {
   const { user } = useAuth();
-  const { scope } = useBrandScope();
   const [result, setResult] = useState<LeadFetchResult | null>(null);
+  const [nt, setNt] = useState<NtOverview | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let cancelled = false;
-    fetchAllLeads()
-      .then((data) => {
-        if (!cancelled) setResult(data);
+    Promise.all([fetchAllLeads(), fetchNieuwTerrasOverview()])
+      .then(([leads, overview]) => {
+        if (cancelled) return;
+        setResult(leads);
+        setNt(overview);
       })
       .finally(() => {
         if (!cancelled) setLoading(false);
@@ -43,47 +40,28 @@ const AdminDashboard = () => {
     };
   }, []);
 
-  const scopedLeads = useMemo(
-    () => filterLeadsByScope(result?.leads ?? [], scope),
-    [result, scope]
+  const nvLeads = useMemo(
+    () => (result?.leads ?? []).filter((lead) => lead.brand === "nv"),
+    [result]
   );
 
   const stats = useMemo(() => {
-    const active = scopedLeads.filter(
-      (lead) => lead.status !== "won" && lead.status !== "lost"
-    );
-    const won = scopedLeads.filter((lead) => lead.status === "won");
-    const offertes = scopedLeads.filter(
-      (lead) => lead.sourceTable === "configurations" || lead.status === "proposal"
-    );
+    const all = result?.leads ?? [];
     return {
-      totalLeads: scopedLeads.length,
-      totalConfigurations: offertes.length,
-      activeLeads: active.length,
-      completedProjects: won.length,
+      totalLeads: all.length,
+      totalConfigurations: all.filter((lead) => lead.status === "proposal").length,
+      activeLeads: all.filter((lead) => lead.status !== "won" && lead.status !== "lost").length,
+      completedProjects: all.filter((lead) => lead.status === "won").length,
     };
-  }, [scopedLeads]);
+  }, [result]);
 
   const statusBreakdown = useMemo(() => {
+    const all = result?.leads ?? [];
     return LEAD_STATUSES.map((status) => ({
       ...status,
-      count: scopedLeads.filter((lead) => (lead.status || "new") === status.value).length,
+      count: all.filter((lead) => (lead.status || "new") === status.value).length,
     }));
-  }, [scopedLeads]);
-
-  const recentLeads = scopedLeads.slice(0, 6).map((lead) => ({
-    id: lead.id,
-    name: lead.name,
-    email: lead.email,
-    project_type: lead.project_type || statusLabel(lead.status),
-    created_at: lead.created_at,
-    phone: lead.phone,
-    brand: lead.brand,
-    status: lead.status,
-  }));
-
-  const scopeTitle =
-    scope === "nv" ? BRANDS.nv.label : scope === "nt" ? BRANDS.nt.label : "NieuweVloer + NieuwTerras";
+  }, [result]);
 
   return (
     <>
@@ -91,26 +69,23 @@ const AdminDashboard = () => {
         <title>Overzicht | Beheer NieuweVloer + NieuwTerras</title>
       </Helmet>
 
-      <div className="space-y-6">
-        <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+      <div className="space-y-8">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">
               Beheer
             </p>
-            <h1 className="text-3xl font-bold tracking-tight">{scopeTitle}</h1>
-            <p className="mt-2 max-w-2xl text-muted-foreground">
-              Welkom{user?.email ? `, ${user.email}` : ""}. Eén sessie voor beide merken.
-              Login via {AUTH_API_URL.replace(/^https:\/\//, "")}.
+            <h1 className="text-3xl font-bold tracking-tight">Overzicht</h1>
+            <p className="mt-2 text-muted-foreground">
+              Welkom{user?.email ? `, ${user.email}` : ""}. NieuweVloer en NieuwTerras in één sessie.
             </p>
           </div>
-          <div className="flex flex-wrap items-center gap-3">
-            <BrandScopeTabs
-              nvCount={result?.nvCount}
-              ntCount={result?.ntCount}
-              className="border-border bg-muted text-foreground [&_button]:text-foreground [&_button[aria-selected=true]]:bg-background"
-            />
+          <div className="flex flex-wrap gap-2">
             <Button asChild>
-              <Link to="/admin/leads">Leads &amp; offertes</Link>
+              <Link to="/admin/leads">NV leads &amp; offertes</Link>
+            </Button>
+            <Button asChild variant="outline">
+              <Link to="/admin/nieuwterras">NieuwTerras</Link>
             </Button>
           </div>
         </div>
@@ -118,40 +93,47 @@ const AdminDashboard = () => {
         {loading ? (
           <div className="flex items-center justify-center py-16 text-muted-foreground">
             <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-            Leads ophalen…
+            Overzicht laden…
           </div>
         ) : (
           <>
             <StatsCards stats={stats} />
 
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-4 lg:grid-cols-2">
               <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-base">{BRANDS.nv.label}</CardTitle>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle>{BRANDS.nv.label}</CardTitle>
+                  <Button asChild variant="ghost" size="sm">
+                    <Link to="/admin/leads">Alles</Link>
+                  </Button>
                 </CardHeader>
-                <CardContent>
-                  <p className="text-3xl font-semibold tabular-nums">{result?.nvCount ?? 0}</p>
-                  <p className="mt-1 text-sm text-muted-foreground">
-                    Leads/offertes via {BRANDS.nv.domain}
-                  </p>
+                <CardContent className="space-y-3">
+                  <p className="text-3xl font-semibold tabular-nums">{nvLeads.length}</p>
+                  <p className="text-sm text-muted-foreground">Aanvragen via {BRANDS.nv.domain}</p>
+                  <ul className="space-y-2">
+                    {nvLeads.slice(0, 5).map((lead) => (
+                      <li key={lead.id} className="flex items-center justify-between gap-3 border-b pb-2 last:border-0">
+                        <div className="min-w-0">
+                          <p className="truncate font-medium">{lead.name}</p>
+                          <p className="truncate text-xs text-muted-foreground">
+                            {lead.project_type || "Aanvraag"} · {new Date(lead.created_at).toLocaleDateString("nl-BE")}
+                          </p>
+                        </div>
+                        <span className={`shrink-0 rounded-full px-2 py-0.5 text-xs ${statusColor(lead.status)}`}>
+                          {statusLabel(lead.status)}
+                        </span>
+                      </li>
+                    ))}
+                    {nvLeads.length === 0 && (
+                      <li className="text-sm text-muted-foreground">Geen NV-leads in de API.</li>
+                    )}
+                  </ul>
                 </CardContent>
               </Card>
+
               <Card>
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-base">{BRANDS.nt.label}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-3xl font-semibold tabular-nums">{result?.ntCount ?? 0}</p>
-                  <p className="mt-1 text-sm text-muted-foreground">
-                    {isNieuwTerrasApiConfigured()
-                      ? `Apart API: ${import.meta.env.VITE_NIEUWTERRAS_API_URL}`
-                      : "Zelfde API, gefilterd op bron/project (terras/patio). Optioneel: VITE_NIEUWTERRAS_API_URL."}
-                  </p>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-base">Status</CardTitle>
+                  <CardTitle>Status (beide merken)</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2">
                   {statusBreakdown.map((item) => (
@@ -164,20 +146,9 @@ const AdminDashboard = () => {
               </Card>
             </div>
 
-            <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-              <div className="lg:col-span-2">
-                <LeadsChart weeklyData={weeklyLeadCounts(scopedLeads)} />
-              </div>
-              <RecentLeadsCard recentLeads={recentLeads} />
-            </div>
+            <NieuwTerrasOverviewPanel data={nt} loading={false} compact />
 
-            {scopedLeads.length === 0 && (
-              <Card>
-                <CardContent className="py-8 text-center text-sm text-muted-foreground">
-                  Geen leads in deze weergave. Er wordt geen testdata getoond — alleen echte API-resultaten.
-                </CardContent>
-              </Card>
-            )}
+            <LeadsChart weeklyData={weeklyLeadCounts(result?.leads ?? [])} />
 
             <QuickActionsSection />
           </>

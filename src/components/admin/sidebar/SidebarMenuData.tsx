@@ -12,6 +12,7 @@ import {
   LogOut,
   Layout,
   Search,
+  Trees,
 } from "lucide-react";
 
 export interface MenuItem {
@@ -48,6 +49,12 @@ export const menuGroups: MenuGroup[] = [
         title: "Leads & offertes",
         href: "/admin/leads",
         icon: <Users className="h-5 w-5" />,
+        highlight: true,
+      },
+      {
+        title: "NieuwTerras",
+        href: "/admin/nieuwterras",
+        icon: <Trees className="h-5 w-5" />,
         highlight: true,
       },
       {

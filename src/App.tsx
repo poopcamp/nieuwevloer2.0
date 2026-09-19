@@ -26,6 +26,7 @@ import AdminContentPage from "./pages/admin/ContentManagement";
 import InspirationManagement from "./pages/admin/InspirationManagement";
 import SeoManagementPage from "./pages/admin/SeoManagement";
 import LeadManagementPage from "./pages/admin/LeadManagement";
+import NieuwTerrasOverviewPage from "./pages/admin/NieuwTerrasOverview";
 import AdminLogin from "./pages/admin/AdminLogin";
 
 import NotFound from "./pages/NotFound";
@@ -62,6 +63,7 @@ function App() {
                 <Route index element={<AdminDashboard />} />
                 <Route path="dashboard" element={<AdminDashboard />} />
                 <Route path="leads" element={<LeadManagementPage />} />
+                <Route path="nieuwterras" element={<NieuwTerrasOverviewPage />} />
                 <Route path="calendar" element={<AdminCalendarManagement />} />
                 <Route path="blog" element={<AdminBlogManagement />} />
                 <Route path="media" element={<AdminMediaManagement />} />

@@ -73,16 +73,58 @@ See `.env.example`. Keys stay on the Home Server — they are not committed.
 | `VITE_NIEUWTERRAS_API_URL` | no | Optional second PostgREST for NieuwTerras |
 | `VITE_NIEUWTERRAS_ANON_KEY` | no | Anon key for that second API (else NV key) |
 | `VITE_NIEUWTERRAS_LEADS_TABLE` | no (default `leads`) | Table name on the NT API |
+| `VITE_NIEUWTERRAS_ADMIN_API` | no | JSON overview URL from nieuwterras-web |
+| `VITE_NIEUWTERRAS_ADMIN_TOKEN` | no | Bearer / X-Admin-Token for that URL |
 
-Without `VITE_NIEUWTERRAS_API_URL`, NieuwTerras rows are inferred from the same `leads` table (`source` / `project_type` containing terras/patio/…). No fake leads are rendered.
+NieuwTerras in-panel (`/admin/nieuwterras`) reads:
+
+1. `api.nieuwevloer.be` `leads` where source/project looks like terras/patio
+2. Optional PostgREST `VITE_NIEUWTERRAS_API_URL`
+3. Optional JSON feed `VITE_NIEUWTERRAS_ADMIN_API` (see contract below)
+
+`poopcamp/nieuwterras-web` is private from this environment. Live standalone admin is cookie-login at https://nieuwterras.be/admin (`POST /admin/login`). Public write path: `POST /api/offerte` (`naam`, `email`, `telefoon`, `gemeente`, `oppervlakte`, `bericht`). There is no public GET list today.
+
+### HS data contract (nieuwterras-web)
+
+Add a session-or-token GET that NV admin can call from the browser:
+
+```
+GET https://nieuwterras.be/api/admin/overview
+Authorization: Bearer <VITE_NIEUWTERRAS_ADMIN_TOKEN>
+X-Admin-Token: <same>
+```
+
+```json
+{
+  "ok": true,
+  "offertes": [
+    {
+      "id": "…",
+      "naam": "…",
+      "email": "…",
+      "telefoon": "…",
+      "gemeente": "…",
+      "oppervlakte": "…",
+      "bericht": "…",
+      "status": "nieuw",
+      "created_at": "2026-09-19T12:00:00.000Z",
+      "gelezen": false
+    }
+  ]
+}
+```
+
+Allow CORS from the NV admin origin. Then set `VITE_NIEUWTERRAS_ADMIN_API` + `VITE_NIEUWTERRAS_ADMIN_TOKEN` on the NV build.
 
 ## Home Server deploy
 
-1. Set `VITE_SUPABASE_ANON_KEY` from the NAS GoTrue project (required). Optionally set `VITE_SUPABASE_URL=https://api.nieuwevloer.be`.
+This repo **is** the live admin SPA (not prestige-driveways).
+
+1. Set `VITE_SUPABASE_ANON_KEY` (required). Optional NT vars above.
 2. `npm ci --legacy-peer-deps && npm run build`
-3. Serve `dist/` with SPA fallback to `index.html` for `/admin` and `/admin/login`.
-4. Keep `/auth/v1/*` and `/rest/v1/*` on `api.nieuwevloer.be`, CORS for the admin origin.
-5. Never bake `*.supabase.co` into the browser auth host.
+3. Sync `dist/` → `/mnt/TheLord/Nieuwevloer/nieuwevloer/live/dist`
+4. SPA fallback to `index.html` for `/admin`, `/admin/login`, `/admin/leads`, `/admin/nieuwterras`
+5. Keep `/auth/v1/*` and `/rest/v1/*` on `api.nieuwevloer.be`
 
 ## Contact
 

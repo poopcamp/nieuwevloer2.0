@@ -60,6 +60,20 @@ export function getNieuwTerrasLeadsTable(): string {
   return import.meta.env.VITE_NIEUWTERRAS_LEADS_TABLE?.trim() || "leads";
 }
 
+/**
+ * Optional JSON feed from nieuwterras-web (HS must expose this; not public today).
+ * Example: https://nieuwterras.be/api/admin/overview
+ */
+export function getNieuwTerrasAdminApiUrl(): string | null {
+  const fromEnv = import.meta.env.VITE_NIEUWTERRAS_ADMIN_API?.trim();
+  if (!fromEnv || isSupabaseCoHost(fromEnv)) return null;
+  return fromEnv;
+}
+
+export function getNieuwTerrasAdminToken(): string {
+  return import.meta.env.VITE_NIEUWTERRAS_ADMIN_TOKEN?.trim() || "";
+}
+
 export function assertSafeAuthHost(url: string): void {
   if (isSupabaseCoHost(url)) {
     throw new Error(

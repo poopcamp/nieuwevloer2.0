@@ -1,4 +1,5 @@
 
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2 } from "lucide-react";
@@ -46,8 +47,12 @@ const LeadManagementPage = () => {
           <h1 className="text-xl font-bold sm:text-2xl">{title}</h1>
           <p className="mt-1 text-sm text-muted-foreground">
             Echte aanvragen uit de API. Status: nieuw, gecontacteerd, offerte, gewonnen, verloren.
+            {" "}
+            <Link to="/admin/nieuwterras" className="underline underline-offset-2">
+              NieuwTerras-overzicht
+            </Link>
             {!ntConfigured && scope !== "nv" && (
-              <> NieuwTerras deelt de NieuweVloer-API tenzij VITE_NIEUWTERRAS_API_URL is gezet.</>
+              <> · NT-rijen hier via bron/project; volledige NT-lijst via HS-contract.</>
             )}
           </p>
         </div>
