@@ -127,7 +127,7 @@ const AdminLogin: React.FC = () => {
                       <Input
                         type="email"
                         placeholder="uw@email.be"
-                        className="border-white/10 bg-slate-950 text-slate-100"
+                        className="border-white/20 bg-slate-800 text-white placeholder:text-slate-400"
                         autoComplete="username"
                         {...field}
                       />
@@ -147,7 +147,7 @@ const AdminLogin: React.FC = () => {
                       <Input
                         type="password"
                         placeholder="••••••••"
-                        className="border-white/10 bg-slate-950 text-slate-100"
+                        className="border-white/20 bg-slate-800 text-white placeholder:text-slate-400"
                         autoComplete="current-password"
                         {...field}
                       />
