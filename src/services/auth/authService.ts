@@ -1,7 +1,7 @@
 
 import { User, Session } from "@supabase/supabase-js";
 import { AUTH_API_URL, supabase } from "@/integrations/supabase/client";
-import { isSupabaseCoHost } from "@/config/api";
+import { hasNieuweVloerAnonKey, isSupabaseCoHost } from "@/config/api";
 
 function toAuthError(error: unknown): Error {
   const message = error instanceof Error ? error.message : String(error ?? "");
@@ -48,6 +48,12 @@ export const authService = {
 
       if (isSupabaseCoHost(AUTH_API_URL)) {
         throw new Error("Login mag niet via *.supabase.co. Gebruik api.nieuwevloer.be.");
+      }
+
+      if (!hasNieuweVloerAnonKey()) {
+        throw new Error(
+          "VITE_SUPABASE_ANON_KEY ontbreekt. Zet de GoTrue anon key op de Home Server (zie .env.example)."
+        );
       }
       
       // Normalize email to lowercase to prevent case sensitivity issues

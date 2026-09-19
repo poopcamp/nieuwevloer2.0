@@ -14,12 +14,13 @@ export function getNieuwTerrasClient(): SupabaseClient | null {
   if (cached !== undefined) return cached;
 
   const url = getNieuwTerrasApiUrl();
-  if (!url) {
+  const key = getNieuwTerrasAnonKey();
+  if (!url || !key) {
     cached = null;
     return cached;
   }
 
-  cached = createClient(url, getNieuwTerrasAnonKey(), {
+  cached = createClient(url, key, {
     auth: {
       persistSession: false,
       autoRefreshToken: false,
@@ -31,5 +32,5 @@ export function getNieuwTerrasClient(): SupabaseClient | null {
 }
 
 export function isNieuwTerrasApiConfigured(): boolean {
-  return Boolean(getNieuwTerrasApiUrl());
+  return Boolean(getNieuwTerrasApiUrl() && getNieuwTerrasAnonKey());
 }

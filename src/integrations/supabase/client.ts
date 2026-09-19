@@ -6,6 +6,7 @@ import {
   assertSafeAuthHost,
   getNieuweVloerAnonKey,
   getNieuweVloerApiUrl,
+  hasNieuweVloerAnonKey,
 } from "@/config/api";
 
 const SUPABASE_URL = getNieuweVloerApiUrl();
@@ -14,7 +15,7 @@ const SUPABASE_PUBLISHABLE_KEY = getNieuweVloerAnonKey();
 assertSafeAuthHost(SUPABASE_URL);
 
 if (import.meta.env.DEV) {
-  console.info("[API] Auth/REST host:", SUPABASE_URL);
+  console.info("[API] Auth/REST host:", SUPABASE_URL, "anon key set:", hasNieuweVloerAnonKey());
 }
 
 // Import the supabase client like this:

@@ -14,7 +14,7 @@ import { useAuth } from "@/contexts/auth-context";
 import { Helmet } from "react-helmet-async";
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { AUTH_API_URL } from "@/integrations/supabase/client";
-import { isSupabaseCoHost } from "@/config/api";
+import { hasNieuweVloerAnonKey, isSupabaseCoHost } from "@/config/api";
 
 const loginSchema = z.object({
   email: z.string().email("Voer een geldig e-mailadres in"),
@@ -36,6 +36,7 @@ const AdminLogin: React.FC = () => {
   const from = location.state?.from?.pathname || "/admin";
   const authHost = AUTH_API_URL.replace(/^https:\/\//, "");
   const unsafeHost = isSupabaseCoHost(AUTH_API_URL);
+  const missingAnonKey = !hasNieuweVloerAnonKey();
 
   const form = useForm<LoginForm>({
     resolver: zodResolver(loginSchema),
@@ -114,6 +115,12 @@ const AdminLogin: React.FC = () => {
               https://api.nieuwevloer.be.
             </p>
           )}
+          {missingAnonKey && (
+            <p className="mb-4 rounded-md border border-amber-500/40 bg-amber-950/50 px-3 py-2 text-sm text-amber-100">
+              VITE_SUPABASE_ANON_KEY ontbreekt. Zet de self-hosted GoTrue anon key bij de Vite-build
+              op de Home Server. Er wordt geen sleutel in de repo gezet.
+            </p>
+          )}
 
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -170,7 +177,7 @@ const AdminLogin: React.FC = () => {
                 )}
               />
 
-              <Button type="submit" className="w-full" disabled={isSubmitting || unsafeHost}>
+              <Button type="submit" className="w-full" disabled={isSubmitting || unsafeHost || missingAnonKey}>
                 {isSubmitting ? (
                   <>
                     <Spinner className="mr-2" size="sm" />

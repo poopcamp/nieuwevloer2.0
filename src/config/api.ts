@@ -1,16 +1,13 @@
 /**
- * Frontend must talk to the Home Server / Kong gateway — never *.supabase.co.
- * Direct supabase.co hosts do not resolve from productie and cause Safari/WebKit
- * "Load failed" on login.
+ * Admin SPA talks to self-hosted GoTrue/PostgREST on the Home Server.
+ * Never use *.supabase.co — that host causes login "Load failed".
+ *
+ * Anon keys come only from Vite env. Do not hardcode or invent JWTs.
  */
 
 const SUPABASE_CO_HOST = /supabase\.co/i;
 
 export const NIEUWELOER_API_DEFAULT = "https://api.nieuwevloer.be";
-
-/** Public anon JWT already used by nieuwevloer.be (Kong → GoTrue/PostgREST). */
-export const NIEUWELOER_ANON_KEY_DEFAULT =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlzcyI6InN1cGFiYXNlIiwiaWF0IjoxNzg2NjU4MjA4LCJleHAiOjIxMDIwMTgyMDh9.adquphELfykfrva55JI0JyRHfDDYNmHtxVotlYk-Tbc";
 
 function trimSlash(url: string): string {
   return url.replace(/\/+$/, "");
@@ -26,8 +23,7 @@ export function isSupabaseCoHost(url: string | undefined | null): boolean {
 }
 
 /**
- * Resolve the NieuweVloer API base used for auth + REST.
- * Env override is ignored when it still points at *.supabase.co.
+ * Auth + REST base. Env override is ignored when it still points at *.supabase.co.
  */
 export function getNieuweVloerApiUrl(): string {
   const fromEnv = import.meta.env.VITE_SUPABASE_URL?.trim();
@@ -37,12 +33,17 @@ export function getNieuweVloerApiUrl(): string {
   return NIEUWELOER_API_DEFAULT;
 }
 
+/** Required at build/runtime. Empty when HS has not set VITE_SUPABASE_ANON_KEY. */
 export function getNieuweVloerAnonKey(): string {
-  return import.meta.env.VITE_SUPABASE_ANON_KEY?.trim() || NIEUWELOER_ANON_KEY_DEFAULT;
+  return import.meta.env.VITE_SUPABASE_ANON_KEY?.trim() || "";
+}
+
+export function hasNieuweVloerAnonKey(): boolean {
+  return getNieuweVloerAnonKey().length > 0;
 }
 
 /**
- * Optional second PostgREST/GoTrue base for NieuwTerras.
+ * Optional second API for NieuwTerras.
  * Leave empty to use the same api.nieuwevloer.be `leads` table (source filter).
  */
 export function getNieuwTerrasApiUrl(): string | null {
