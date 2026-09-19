@@ -15,7 +15,8 @@ import {
   DropdownMenuTrigger 
 } from "@/components/ui/dropdown-menu";
 import { Mail, Phone, Eye, User2 } from "lucide-react";
-import { Lead, LEAD_STATUSES } from "./types";
+import { Lead, LEAD_STATUSES, statusColor, statusLabel } from "./types";
+import { brandMeta } from "@/config/brands";
 
 interface LeadsTableProps {
   leads: Lead[];
@@ -40,6 +41,7 @@ const LeadsTable = ({
         <TableHeader>
           <TableRow>
             <TableHead>Naam</TableHead>
+            <TableHead>Merk</TableHead>
             <TableHead>Contact</TableHead>
             <TableHead>Project</TableHead>
             <TableHead>Aangemaakt</TableHead>
@@ -56,6 +58,11 @@ const LeadsTable = ({
                   <User2 className="h-4 w-4 text-muted-foreground" />
                   <span>{lead.name}</span>
                 </div>
+              </TableCell>
+              <TableCell>
+                <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${brandMeta(lead.brand).badgeClass}`}>
+                  {brandMeta(lead.brand).shortLabel}
+                </span>
               </TableCell>
               <TableCell>
                 <div className="space-y-1">
@@ -82,12 +89,10 @@ const LeadsTable = ({
                   <DropdownMenuTrigger asChild>
                     <Button 
                       variant="ghost" 
-                      className={`h-7 ${
-                        LEAD_STATUSES.find(s => s.value === lead.status)?.color || 'bg-gray-100 text-gray-800'
-                      }`}
+                      className={`h-7 ${statusColor(lead.status)}`}
                       size="sm"
                     >
-                      {LEAD_STATUSES.find(s => s.value === lead.status)?.label || 'Nieuw'}
+                      {statusLabel(lead.status)}
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>

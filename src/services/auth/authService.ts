@@ -1,6 +1,17 @@
 
 import { User, Session } from "@supabase/supabase-js";
-import { supabase } from "@/integrations/supabase/client";
+import { AUTH_API_URL, supabase } from "@/integrations/supabase/client";
+import { isSupabaseCoHost } from "@/config/api";
+
+function toAuthError(error: unknown): Error {
+  const message = error instanceof Error ? error.message : String(error ?? "");
+  if (/load failed|failed to fetch|networkerror|network request failed/i.test(message)) {
+    return new Error(
+      `Verbinding met de login-server mislukt (${AUTH_API_URL}). Controleer of de Home Server api.nieuwevloer.be bereikbaar is.`
+    );
+  }
+  return error instanceof Error ? error : new Error(message || "Onbekende authenticatiefout");
+}
 
 /**
  * Core authentication service that centralizes all auth-related functionality
@@ -33,7 +44,11 @@ export const authService = {
     rememberMe: boolean = false
   ) => {
     try {
-      console.log("[AuthService] Signing in with email:", email);
+      console.log("[AuthService] Signing in with email:", email, "host:", AUTH_API_URL);
+
+      if (isSupabaseCoHost(AUTH_API_URL)) {
+        throw new Error("Login mag niet via *.supabase.co. Gebruik api.nieuwevloer.be.");
+      }
       
       // Normalize email to lowercase to prevent case sensitivity issues
       const normalizedEmail = email.toLowerCase().trim();
@@ -66,7 +81,7 @@ export const authService = {
       return data;
     } catch (error: any) {
       console.error("[AuthService] Authentication error:", error);
-      throw error;
+      throw toAuthError(error);
     }
   },
 

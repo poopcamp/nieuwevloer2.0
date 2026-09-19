@@ -6,19 +6,14 @@ import {
   FileText,
   Calendar,
   Image,
-  Inbox,
   Calculator,
   BookOpen,
-  Building,
   Grid3X3,
   LogOut,
-  Landmark,
   Layout,
-  CalculatorIcon,
-  Clock,
+  Search,
 } from "lucide-react";
 
-// Define the MenuGroup and MenuItem types
 export interface MenuItem {
   title: string;
   href: string;
@@ -33,7 +28,7 @@ export interface MenuGroup {
 }
 
 export const HomeButton = () => (
-  <Home className="mr-2 h-5 w-5"/>
+  <Home className="mr-2 h-5 w-5" />
 );
 
 export const LogoutIcon = (
@@ -42,7 +37,7 @@ export const LogoutIcon = (
 
 export const menuGroups: MenuGroup[] = [
   {
-    title: "Dashboard",
+    title: "Overzicht",
     items: [
       {
         title: "Dashboard",
@@ -50,43 +45,39 @@ export const menuGroups: MenuGroup[] = [
         icon: <Home className="h-5 w-5" />,
       },
       {
-        title: "Leads",
+        title: "Leads & offertes",
         href: "/admin/leads",
         icon: <Users className="h-5 w-5" />,
+        highlight: true,
       },
       {
         title: "Afspraken",
         href: "/admin/calendar",
         icon: <Calendar className="h-5 w-5" />,
       },
-      {
-        title: "Berichten",
-        href: "/admin/messages",
-        icon: <Inbox className="h-5 w-5" />,
-      }
-    ]
+    ],
   },
   {
     title: "Calculators",
     items: [
       {
-        title: "Snelle Prijsindicatie",
+        title: "Snelle prijsindicatie",
         href: "/admin/quick-calculator",
         icon: <Calculator className="h-5 w-5" />,
       },
       {
-        title: "Uitgebreide Calculator",
+        title: "Uitgebreide calculator",
         href: "/admin/extended-calculator",
-        icon: <CalculatorIcon className="h-5 w-5" />,
-      }
-    ]
+        icon: <Calculator className="h-5 w-5" />,
+      },
+    ],
   },
   {
     title: "Content",
     items: [
       {
         title: "Homepage",
-        href: "/admin/home",
+        href: "/admin/content",
         icon: <Layout className="h-5 w-5" />,
       },
       {
@@ -100,27 +91,27 @@ export const menuGroups: MenuGroup[] = [
         icon: <FileText className="h-5 w-5" />,
       },
       {
-        title: "Projecten",
-        href: "/admin/projects",
-        icon: <Building className="h-5 w-5" />,
-      }
-    ]
+        title: "Inspiratie",
+        href: "/admin/inspiration",
+        icon: <Image className="h-5 w-5" />,
+      },
+    ],
   },
   {
-    title: "Configuratie",
+    title: "Systeem",
     items: [
       {
-        title: "Configurator Builder",
+        title: "Configurator",
         href: "/admin/configurator-builder",
         icon: <BookOpen className="h-5 w-5" />,
       },
       {
-        title: "Project Types",
-        href: "/admin/project-types",
-        icon: <Landmark className="h-5 w-5" />,
+        title: "SEO",
+        href: "/admin/seo",
+        icon: <Search className="h-5 w-5" />,
       },
       {
-        title: "Media Bestanden",
+        title: "Media",
         href: "/admin/media",
         icon: <Image className="h-5 w-5" />,
       },
@@ -128,7 +119,7 @@ export const menuGroups: MenuGroup[] = [
         title: "Instellingen",
         href: "/admin/settings",
         icon: <Settings className="h-5 w-5" />,
-      }
-    ]
-  }
+      },
+    ],
+  },
 ];

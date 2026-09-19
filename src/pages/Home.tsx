@@ -39,7 +39,7 @@ const Home = () => {
       if (isFromLogin || location.state?.adminRedirect) {
         console.log("[HomePage] Admin user detected, redirecting to dashboard");
         setTimeout(() => {
-          navigate("/admin/dashboard", { replace: true });
+          navigate("/admin", { replace: true });
         }, 100);
       }
     }

@@ -1,5 +1,6 @@
 
-import { Menu, Bell, User, Home, Search, Settings, Sun, Moon } from 'lucide-react';
+import { Menu, Bell, User, Home, Settings, Sun, Moon } from 'lucide-react';
+import BrandScopeTabs from '@/components/admin/BrandScopeTabs';
 import { 
   DropdownMenu, 
   DropdownMenuContent, 
@@ -11,7 +12,6 @@ import { useAuthActions } from '@/hooks/useAuthActions';
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from '@/components/ui/tooltip';
 
@@ -28,9 +28,8 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
 }) => {
   const { signOut } = useAuthActions();
   const navigate = useNavigate();
-  const [notificationCount] = useState(2);
+  const [notificationCount] = useState(0);
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
-  const [searchVisible, setSearchVisible] = useState(false);
   
   // Theme toggle effect
   useEffect(() => {
@@ -58,40 +57,26 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
   
   return (
     <TooltipProvider>
-      <header className="bg-white dark:bg-gray-950 dark:text-white shadow-sm z-10 border-b border-gray-200 dark:border-gray-800">
+      <header className="z-10 border-b border-white/10 bg-slate-900 text-white shadow-sm">
         <div className="flex items-center justify-between px-3 py-3 md:px-6 md:py-4">
           <div className="flex items-center gap-3">
             <Button 
               variant="ghost"
               size="icon"
-              className="text-gray-500 dark:text-gray-400 focus:outline-none"
+              className="text-slate-300 hover:text-white focus:outline-none"
               onClick={toggleSidebar}
               aria-label={sidebarOpen ? "Sluit sidebar" : "Open sidebar"}
             >
               <Menu size={22} />
             </Button>
-            <h1 className="text-lg md:text-xl font-semibold truncate hidden sm:block">Admin Dashboard</h1>
+            <h1 className="hidden truncate text-lg font-semibold sm:block md:text-xl">NieuweVloer + NieuwTerras</h1>
           </div>
           
-          <div className={`${searchVisible ? 'flex' : 'hidden'} sm:flex items-center max-w-md w-full mx-4 relative`}>
-            <Input
-              type="search"
-              placeholder="Zoeken..."
-              className="w-full focus-visible:ring-primary"
-            />
-            <Search size={18} className="absolute right-3 text-gray-400" />
+          <div className="mx-2 hidden md:block">
+            <BrandScopeTabs />
           </div>
           
           <div className="flex items-center space-x-2 sm:space-x-4">
-            {/* Search toggle for mobile */}
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              className="sm:hidden text-gray-500 dark:text-gray-400 focus:outline-none"
-              onClick={() => setSearchVisible(!searchVisible)}
-            >
-              <Search size={20} />
-            </Button>
             
             {/* Home button */}
             <Tooltip>
@@ -99,7 +84,7 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
                 <Button 
                   variant="ghost" 
                   size="icon" 
-                  className="hidden sm:flex text-gray-500 dark:text-gray-400 focus:outline-none" 
+                  className="hidden text-slate-300 hover:text-white focus:outline-none sm:flex" 
                   asChild
                 >
                   <Link to="/">
@@ -119,7 +104,7 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
                   variant="ghost" 
                   size="icon" 
                   onClick={toggleTheme} 
-                  className="text-gray-500 dark:text-gray-400 focus:outline-none"
+                  className="text-slate-300 hover:text-white focus:outline-none"
                 >
                   {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
                 </Button>
@@ -136,7 +121,7 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
                   <Button 
                     variant="ghost" 
                     size="icon" 
-                    className="relative text-gray-500 dark:text-gray-400 focus:outline-none"
+                    className="relative text-slate-300 hover:text-white focus:outline-none"
                   >
                     <Bell size={20} />
                     {notificationCount > 0 && (

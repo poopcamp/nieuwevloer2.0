@@ -5,7 +5,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Mail, Phone, Tag, User2 } from "lucide-react";
-import { Lead, LEAD_STATUSES } from "./types";
+import { Lead, statusColor, statusLabel } from "./types";
+import { brandMeta } from "@/config/brands";
 
 interface LeadDetailDialogProps {
   lead: Lead | null;
@@ -30,10 +31,11 @@ const LeadDetailDialog = ({
         <DialogHeader>
           <DialogTitle className="flex items-center space-x-2">
             <span>Lead details: {lead.name}</span>
-            <Badge variant="outline" className={
-              LEAD_STATUSES.find(s => s.value === lead.status)?.color || 'bg-gray-100 text-gray-800'
-            }>
-              {LEAD_STATUSES.find(s => s.value === lead.status)?.label || 'Nieuw'}
+            <Badge variant="outline" className={brandMeta(lead.brand).badgeClass}>
+              {brandMeta(lead.brand).label}
+            </Badge>
+            <Badge variant="outline" className={statusColor(lead.status)}>
+              {statusLabel(lead.status)}
             </Badge>
           </DialogTitle>
         </DialogHeader>
