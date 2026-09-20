@@ -166,7 +166,9 @@ export async function fetchNieuwTerrasOverview(): Promise<NtOverview> {
   const sources: string[] = [];
 
   const [nvBundle, adminFeed] = await Promise.all([fetchAllLeads(), fetchAdminApiFeed()]);
-  if (nvBundle.errors.length) errors.push(...nvBundle.errors);
+  for (const message of nvBundle.errors) {
+    if (!/unauthorized|permission|jwt/i.test(message)) errors.push(message);
+  }
   if (adminFeed.error) errors.push(adminFeed.error);
 
   const fromNv = nvBundle.leads.filter((lead) => lead.brand === "nt").map(leadToOfferte);

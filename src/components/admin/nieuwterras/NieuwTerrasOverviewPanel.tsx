@@ -165,7 +165,7 @@ const NieuwTerrasOverviewPanel = ({ data, loading, compact = false }: NieuwTerra
             <p className="text-xs text-stone-500">Bron: {data.sources.join(" · ")}</p>
           ) : null}
 
-          {data?.errors.length ? (
+          {!compact && data?.errors.length ? (
             <p className="text-xs text-red-700">{data.errors.join(" · ")}</p>
           ) : null}
 

@@ -32,6 +32,11 @@ async function fetchTable(
     if (error.code === "PGRST205" || error.code === "42P01") {
       return { rows: [] };
     }
+    const optional = table !== "leads";
+    const permission = /unauthorized|permission|jwt|row-level|rls/i.test(error.message);
+    if (optional && permission) {
+      return { rows: [] };
+    }
     return { rows: [], error: `${table}: ${error.message}` };
   }
 
