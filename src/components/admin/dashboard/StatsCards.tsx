@@ -23,7 +23,7 @@ const StatsCards = ({ stats }: StatsCardsProps) => {
               <Users className="h-4 w-4 sm:h-6 sm:w-6 text-primary" />
             </div>
             <div>
-              <p className="text-xs sm:text-sm font-medium text-muted-foreground">Totaal Leads</p>
+              <p className="text-xs sm:text-sm font-medium text-muted-foreground">Totaal</p>
               <h3 className="text-lg sm:text-2xl font-bold">{stats.totalLeads}</h3>
             </div>
           </div>
@@ -37,7 +37,7 @@ const StatsCards = ({ stats }: StatsCardsProps) => {
               <MessageSquare className="h-4 w-4 sm:h-6 sm:w-6 text-green-500" />
             </div>
             <div>
-              <p className="text-xs sm:text-sm font-medium text-muted-foreground">Actieve Leads</p>
+              <p className="text-xs sm:text-sm font-medium text-muted-foreground">Actief</p>
               <h3 className="text-lg sm:text-2xl font-bold">{stats.activeLeads}</h3>
             </div>
           </div>
@@ -51,7 +51,7 @@ const StatsCards = ({ stats }: StatsCardsProps) => {
               <Eye className="h-4 w-4 sm:h-6 sm:w-6 text-blue-500" />
             </div>
             <div>
-              <p className="text-xs sm:text-sm font-medium text-muted-foreground">Configuraties</p>
+              <p className="text-xs sm:text-sm font-medium text-muted-foreground">Offertes verzonden</p>
               <h3 className="text-lg sm:text-2xl font-bold">{stats.totalConfigurations}</h3>
             </div>
           </div>
@@ -65,7 +65,7 @@ const StatsCards = ({ stats }: StatsCardsProps) => {
               <TrendingUp className="h-4 w-4 sm:h-6 sm:w-6 text-purple-500" />
             </div>
             <div>
-              <p className="text-xs sm:text-sm font-medium text-muted-foreground">Voltooide Projecten</p>
+              <p className="text-xs sm:text-sm font-medium text-muted-foreground">Gewonnen</p>
               <h3 className="text-lg sm:text-2xl font-bold">{stats.completedProjects}</h3>
             </div>
           </div>

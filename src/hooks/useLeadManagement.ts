@@ -1,7 +1,8 @@
 
 import { useState, useEffect, useMemo } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
-import { Lead } from "@/components/admin/lead-management/types";
+import { Lead, LEAD_STATUSES } from "@/components/admin/lead-management/types";
 import { sendFollowUpEmail } from "@/utils/followUpHelpers";
 import { fetchAllLeads, updateLeadStatus as persistLeadStatus } from "@/services/leads/leadService";
 import { useBrandScope } from "@/contexts/brand-context";
@@ -12,7 +13,19 @@ export const useLeadManagement = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [statusFilter, setStatusFilter] = useState<string | null>(null);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const statusFromUrl = searchParams.get("status");
+  const [statusFilter, setStatusFilterState] = useState<string | null>(
+    statusFromUrl && LEAD_STATUSES.some((item) => item.value === statusFromUrl) ? statusFromUrl : null
+  );
+
+  const setStatusFilter = (status: string | null) => {
+    setStatusFilterState(status);
+    const next = new URLSearchParams(searchParams);
+    if (status) next.set("status", status);
+    else next.delete("status");
+    setSearchParams(next, { replace: true });
+  };
   const [isSending, setIsSending] = useState(false);
   const [ntConfigured, setNtConfigured] = useState(false);
   const [fetchErrors, setFetchErrors] = useState<string[]>([]);

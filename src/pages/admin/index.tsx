@@ -7,6 +7,7 @@ import { useBrandScope } from "@/contexts/brand-context";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
+import { cn } from "@/lib/utils";
 import StatsCards from "@/components/admin/dashboard/StatsCards";
 import LeadsChart from "@/components/admin/dashboard/LeadsChart";
 import BrandScopeTabs from "@/components/admin/BrandScopeTabs";
@@ -72,6 +73,7 @@ const AdminDashboard = () => {
 
   const showNv = scope !== "nt";
   const showNt = scope !== "nv";
+  const splitBrands = showNv && showNt;
 
   return (
     <>
@@ -106,54 +108,57 @@ const AdminDashboard = () => {
           <>
             <StatsCards stats={stats} />
 
-            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-              {LEAD_STATUSES.map((item) => {
-                const count = statusBreakdown.find((row) => row.value === item.value)?.count ?? 0;
-                return (
-                  <div key={item.value} className="flex items-center justify-between rounded-lg border bg-card px-3 py-2 text-sm">
-                    <span className={`rounded-full px-2 py-0.5 ${item.color}`}>{item.label}</span>
-                    <span className="tabular-nums text-muted-foreground">{count}</span>
-                  </div>
-                );
-              })}
+            <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+              {statusBreakdown.map((item) => (
+                <Link
+                  key={item.value}
+                  to={`/admin/leads?status=${item.value}`}
+                  className="flex items-center justify-between rounded-lg border bg-card px-3 py-2 text-sm transition-colors hover:border-slate-400"
+                >
+                  <span className={`rounded-full px-2 py-0.5 ${item.color}`}>{item.label}</span>
+                  <span className="tabular-nums text-muted-foreground">{item.count}</span>
+                </Link>
+              ))}
             </div>
 
-            {showNv && (
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0">
-                  <div>
-                    <CardTitle>{BRANDS.nv.label} — leads &amp; offertes</CardTitle>
-                    <p className="mt-1 text-sm text-muted-foreground">{nvLeads.length} aanvragen</p>
-                  </div>
-                  <Button asChild variant="outline" size="sm">
-                    <Link to="/admin/leads">Lijst + status</Link>
-                  </Button>
-                </CardHeader>
-                <CardContent>
-                  {nvLeads.length === 0 ? (
-                    <p className="text-sm text-muted-foreground">Geen NieuweVloer-leads in de API.</p>
-                  ) : (
-                    <ul className="divide-y">
-                      {nvLeads.slice(0, 8).map((lead) => (
-                        <li key={lead.id} className="flex items-center justify-between gap-3 py-2.5">
-                          <div className="min-w-0">
-                            <p className="truncate font-medium">{lead.name}</p>
-                            <p className="truncate text-xs text-muted-foreground">
-                              {lead.project_type || "Aanvraag"} · {new Date(lead.created_at).toLocaleDateString("nl-BE")}
-                            </p>
-                          </div>
-                          <span className={`shrink-0 rounded-full px-2 py-0.5 text-xs ${statusColor(lead.status)}`}>
-                            {statusLabel(lead.status)}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </CardContent>
-              </Card>
-            )}
+            <div className={cn("grid gap-6", splitBrands && "xl:grid-cols-2")}>
+              {showNv && (
+                <Card>
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0">
+                    <div>
+                      <CardTitle>{BRANDS.nv.label} — leads &amp; offertes</CardTitle>
+                      <p className="mt-1 text-sm text-muted-foreground">{nvLeads.length} aanvragen</p>
+                    </div>
+                    <Button asChild variant="outline" size="sm">
+                      <Link to="/admin/leads">Lijst + status</Link>
+                    </Button>
+                  </CardHeader>
+                  <CardContent>
+                    {nvLeads.length === 0 ? (
+                      <p className="text-sm text-muted-foreground">Geen NieuweVloer-leads in de API.</p>
+                    ) : (
+                      <ul className="divide-y">
+                        {nvLeads.slice(0, 8).map((lead) => (
+                          <li key={lead.id} className="flex items-center justify-between gap-3 py-2.5">
+                            <div className="min-w-0">
+                              <p className="truncate font-medium">{lead.name}</p>
+                              <p className="truncate text-xs text-muted-foreground">
+                                {lead.project_type || "Aanvraag"} · {new Date(lead.created_at).toLocaleDateString("nl-BE")}
+                              </p>
+                            </div>
+                            <span className={`shrink-0 rounded-full px-2 py-0.5 text-xs ${statusColor(lead.status)}`}>
+                              {statusLabel(lead.status)}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </CardContent>
+                </Card>
+              )}
 
-            {showNt && <NieuwTerrasOverviewPanel data={nt} loading={false} compact={scope === "all"} />}
+              {showNt && <NieuwTerrasOverviewPanel data={nt} loading={false} compact={scope === "all"} />}
+            </div>
 
             {scope !== "nt" && <LeadsChart weeklyData={weeklyLeadCounts(scopedLeads)} />}
           </>

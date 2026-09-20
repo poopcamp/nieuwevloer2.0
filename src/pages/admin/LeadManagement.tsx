@@ -45,7 +45,7 @@ const LeadManagementPage = () => {
         <div>
           <h1 className="text-xl font-bold sm:text-2xl">{title}</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Filter op merk en status. Geen testdata.
+            Filter op merk en status. Alleen echte aanvragen uit de API.
             {scope !== "nv" && (
               <>
                 {" "}

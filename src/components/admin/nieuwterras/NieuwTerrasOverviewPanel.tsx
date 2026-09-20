@@ -1,8 +1,10 @@
+import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { Loader2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { statusColor, statusLabel } from "@/components/admin/lead-management/types";
+import { cn } from "@/lib/utils";
+import { LEAD_STATUSES, statusColor, statusLabel } from "@/components/admin/lead-management/types";
 import type { NtOverview } from "@/services/leads/nieuwterrasOverview";
 
 interface NieuwTerrasOverviewPanelProps {
@@ -12,7 +14,13 @@ interface NieuwTerrasOverviewPanelProps {
 }
 
 const NieuwTerrasOverviewPanel = ({ data, loading, compact = false }: NieuwTerrasOverviewPanelProps) => {
-  const rows = compact ? data?.offertes.slice(0, 8) ?? [] : data?.offertes ?? [];
+  const [statusFilter, setStatusFilter] = useState<string | null>(null);
+  const allRows = data?.offertes ?? [];
+  const filtered = useMemo(() => {
+    if (!statusFilter) return allRows;
+    return allRows.filter((row) => (row.status || "new") === statusFilter);
+  }, [allRows, statusFilter]);
+  const rows = compact ? filtered.slice(0, 8) : filtered;
 
   return (
     <section className="space-y-4 rounded-2xl border border-stone-200 bg-[#FBFAF7] p-4 text-[#1E2422] dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100 sm:p-6">
@@ -65,6 +73,45 @@ const NieuwTerrasOverviewPanel = ({ data, loading, compact = false }: NieuwTerra
             </Card>
           </div>
 
+          {!compact && (
+            <div className="flex flex-wrap gap-1.5" role="tablist" aria-label="NieuwTerras status">
+              <button
+                type="button"
+                role="tab"
+                aria-selected={statusFilter === null}
+                onClick={() => setStatusFilter(null)}
+                className={cn(
+                  "rounded-full px-2.5 py-1 text-xs font-medium transition-colors",
+                  statusFilter === null
+                    ? "bg-[#1E2422] text-white"
+                    : "bg-stone-200 text-stone-600 hover:text-stone-900 dark:bg-stone-800 dark:text-stone-300"
+                )}
+              >
+                Alle ({allRows.length})
+              </button>
+              {LEAD_STATUSES.map((status) => {
+                const count = allRows.filter((row) => (row.status || "new") === status.value).length;
+                return (
+                  <button
+                    key={status.value}
+                    type="button"
+                    role="tab"
+                    aria-selected={statusFilter === status.value}
+                    onClick={() => setStatusFilter(statusFilter === status.value ? null : status.value)}
+                    className={cn(
+                      "rounded-full px-2.5 py-1 text-xs font-medium transition-colors",
+                      statusFilter === status.value
+                        ? status.color
+                        : "bg-stone-200 text-stone-600 hover:text-stone-900 dark:bg-stone-800 dark:text-stone-300"
+                    )}
+                  >
+                    {status.label} ({count})
+                  </button>
+                );
+              })}
+            </div>
+          )}
+
           <div className="overflow-x-auto rounded-xl border border-stone-200 bg-white dark:bg-stone-950">
             <table className="w-full text-left text-sm">
               <thead className="bg-[#F4F2EC] text-xs uppercase tracking-wide text-stone-600 dark:bg-stone-800 dark:text-stone-300">
@@ -81,7 +128,9 @@ const NieuwTerrasOverviewPanel = ({ data, loading, compact = false }: NieuwTerra
                 {rows.length === 0 ? (
                   <tr>
                     <td colSpan={6} className="px-3 py-8 text-center text-stone-500">
-                      Nog geen NieuwTerras-offertes in de gekoppelde bronnen.
+                      {allRows.length === 0
+                        ? "Nog geen NieuwTerras-offertes in de gekoppelde bronnen."
+                        : "Geen offertes met deze status."}
                     </td>
                   </tr>
                 ) : (

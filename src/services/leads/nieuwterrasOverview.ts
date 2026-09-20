@@ -50,6 +50,25 @@ function leadToOfferte(lead: Lead): NtOfferte {
   };
 }
 
+function normalizeNtStatus(status: string): string {
+  const map: Record<string, string> = {
+    nieuw: "new",
+    new: "new",
+    gecontacteerd: "contacted",
+    contacted: "contacted",
+    offerte: "proposal",
+    "offerte verzonden": "proposal",
+    proposal: "proposal",
+    gewonnen: "won",
+    won: "won",
+    verloren: "lost",
+    lost: "lost",
+    "on-hold": "on-hold",
+    onhold: "on-hold",
+  };
+  return map[status.toLowerCase()] || status;
+}
+
 function pickString(row: Record<string, unknown>, keys: string[]): string {
   for (const key of keys) {
     const value = row[key];
@@ -76,7 +95,7 @@ function mapAdminRow(row: Record<string, unknown>, index: number): NtOfferte {
     gemeente: pickString(row, ["gemeente", "city", "plaats"]) || null,
     oppervlakte: pickString(row, ["oppervlakte", "m2", "square_meters"]) || null,
     message: pickString(row, ["bericht", "message", "notes"]) || null,
-    status: pickString(row, ["status"]) || (unread ? "new" : "contacted"),
+    status: normalizeNtStatus(pickString(row, ["status"]) || (unread ? "new" : "contacted")),
     created_at: created,
     unread,
     source: "nt-admin-api",
