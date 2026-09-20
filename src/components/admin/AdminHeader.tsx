@@ -69,7 +69,7 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
             >
               <Menu size={22} />
             </Button>
-            <h1 className="hidden truncate text-lg font-semibold sm:block md:text-xl">NieuweVloer + NieuwTerras</h1>
+            <h1 className="hidden text-lg font-semibold sm:block md:text-xl">Beheer</h1>
           </div>
           
           <div className="mx-2 hidden md:block">
