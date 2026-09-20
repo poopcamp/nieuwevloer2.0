@@ -1,80 +1,54 @@
 
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext } from "react";
+import type { Session, User } from "@supabase/supabase-js";
+import { useAuthState } from "@/hooks/useAuthState";
+import { authService } from "@/services/auth/authService";
 
 interface AuthContextType {
-  user: any | null;
+  user: User | null;
+  session: Session | null;
   isAdmin: boolean;
   isLoading: boolean;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
-  refreshAuth: () => Promise<void>; // Add this property
+  refreshAuth: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType>({
   user: null,
+  session: null,
   isAdmin: false,
-  isLoading: false,
+  isLoading: true,
   login: async () => {},
   logout: async () => {},
-  refreshAuth: async () => {}, // Add this property
+  refreshAuth: async () => {},
 });
 
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<any | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const { user, session, isAdmin, isLoading, refreshAuth } = useAuthState();
 
   const login = async (email: string, password: string) => {
-    setIsLoading(true);
-    try {
-      // Implement actual login logic here
-      setUser({ email, role: 'admin' });
-    } catch (error) {
-      console.error('Login error:', error);
-    } finally {
-      setIsLoading(false);
-    }
+    await authService.signInWithEmail(email, password);
+    await refreshAuth();
   };
 
   const logout = async () => {
-    setIsLoading(true);
-    try {
-      // Implement actual logout logic here
-      setUser(null);
-    } catch (error) {
-      console.error('Logout error:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  
-  // Add refreshAuth function
-  const refreshAuth = async () => {
-    setIsLoading(true);
-    try {
-      // Implement actual refresh logic here
-      // For now, just check if user exists
-      console.log('Refreshing auth state...');
-      if (user) {
-        // Refresh user data if needed
-      }
-    } catch (error) {
-      console.error('Auth refresh error:', error);
-    } finally {
-      setIsLoading(false);
-    }
+    await authService.signOut();
+    await refreshAuth();
   };
 
   return (
     <AuthContext.Provider
       value={{
         user,
-        isAdmin: user?.role === 'admin',
+        session,
+        isAdmin,
         isLoading,
         login,
         logout,
-        refreshAuth, // Add this property
+        refreshAuth,
       }}
     >
       {children}

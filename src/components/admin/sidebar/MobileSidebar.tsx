@@ -37,14 +37,14 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({
         
         <aside 
           className={cn(
-            "fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-gray-950 border-r border-gray-200 dark:border-gray-800 transition-transform duration-300 ease-in-out transform",
+            "fixed inset-y-0 left-0 z-50 w-64 bg-slate-950 text-slate-100 border-r border-white/10 transition-transform duration-300 ease-in-out transform",
             isOpen ? "translate-x-0" : "-translate-x-full"
           )}
         >
           <div className="p-4 flex items-center justify-between">
             <div>
-              <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">Admin Panel</h2>
-              <p className="text-sm text-gray-500 dark:text-gray-400">NieuweVloer.be</p>
+              <h2 className="text-xl font-bold text-white">Beheer</h2>
+              <p className="text-sm text-slate-400">NieuweVloer · NieuwTerras</p>
             </div>
             <Button variant="ghost" size="icon" onClick={onClose} className="h-8 w-8">
               <X className="h-5 w-5" />
@@ -75,7 +75,7 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({
                   <CollapsibleTrigger asChild>
                     <Button
                       variant="ghost"
-                      className="w-full justify-between text-xs font-medium text-gray-500 dark:text-gray-400 py-1 h-auto"
+                      className="w-full justify-between text-xs font-medium text-slate-400 py-1 h-auto hover:text-white"
                     >
                       <span>{group.title}</span>
                       <ChevronRight className={cn(
@@ -91,8 +91,8 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({
                         variant={isActive(item.href) ? "default" : "ghost"}
                         className={cn(
                           "w-full justify-start text-sm font-medium py-2 h-auto px-3",
-                          isActive(item.href) ? "bg-primary text-primary-foreground" : "hover:bg-muted/50",
-                          item.highlight && !isActive(item.href) && "text-primary"
+                          isActive(item.href) ? "bg-teal-700 text-white" : "text-slate-200 hover:bg-white/10",
+                          item.highlight && !isActive(item.href) && "text-teal-300"
                         )}
                         asChild
                         onClick={onClose}
@@ -114,7 +114,7 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({
             ))}
           </nav>
           
-          <div className="p-4 mt-auto border-t border-gray-200 dark:border-gray-800">
+          <div className="mt-auto border-t border-white/10 p-4">
             <Button
               variant="outline"
               className="w-full justify-start text-sm"

@@ -14,12 +14,10 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onClose }) => {
   const location = useLocation();
   const { signOut } = useAuthActions();
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({
-    'Dashboard': true,
-    'Content': true,
-    'Marketing': false,
-    'Configurator': false,
-    'Calculators': false,
-    'Systeembeheer': false
+    Overzicht: true,
+    Content: true,
+    Calculators: false,
+    Systeem: false,
   });
   
   const isActive = (path: string) => {

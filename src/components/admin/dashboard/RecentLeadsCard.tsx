@@ -9,6 +9,8 @@ interface RecentLead {
   project_type: string;
   created_at: string;
   phone?: string;
+  brand?: "nv" | "nt";
+  status?: string;
 }
 
 interface RecentLeadsCardProps {
@@ -33,7 +35,9 @@ const RecentLeadsCard = ({ recentLeads }: RecentLeadsCardProps) => {
                   <p className="font-medium text-sm truncate">{lead.name}</p>
                   <p className="text-xs text-muted-foreground truncate">{lead.email}</p>
                   <p className="text-xs text-muted-foreground">
-                    {lead.project_type || 'Algemene aanvraag'} - {new Date(lead.created_at).toLocaleDateString('nl-BE')}
+                    {lead.brand === "nt" ? "NieuwTerras" : lead.brand === "nv" ? "NieuweVloer" : ""}
+                    {lead.brand ? " · " : ""}
+                    {lead.project_type || "Algemene aanvraag"} — {new Date(lead.created_at).toLocaleDateString("nl-BE")}
                   </p>
                 </div>
               </div>

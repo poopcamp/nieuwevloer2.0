@@ -31,7 +31,7 @@ const DesktopSidebar: React.FC<DesktopSidebarProps> = ({
   return (
     <TooltipProvider>
       <aside className={cn(
-        "h-screen bg-white dark:bg-gray-950 border-r border-gray-200 dark:border-gray-800 flex flex-col transition-all duration-300",
+        "h-screen bg-slate-950 text-slate-100 border-r border-white/10 flex flex-col transition-all duration-300",
         isOpen ? "w-64" : "w-[70px]"
       )}>
         <div className={cn(
@@ -41,8 +41,8 @@ const DesktopSidebar: React.FC<DesktopSidebarProps> = ({
           {isOpen ? (
             <>
               <div>
-                <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">Admin</h2>
-                <p className="text-sm text-gray-500 dark:text-gray-400">NieuweVloer.be</p>
+                <h2 className="text-lg font-semibold tracking-tight text-white">Beheer</h2>
+                <p className="text-xs text-slate-400">NieuweVloer · NieuwTerras</p>
               </div>
               <Button variant="ghost" size="icon" onClick={onClose} className="h-8 w-8">
                 <PanelLeft className="h-5 w-5" />
@@ -89,7 +89,7 @@ const DesktopSidebar: React.FC<DesktopSidebarProps> = ({
                   <CollapsibleTrigger asChild>
                     <Button
                       variant="ghost"
-                      className="w-full justify-between text-xs font-medium text-gray-500 dark:text-gray-400 py-1 h-auto"
+                      className="w-full justify-between text-xs font-medium text-slate-400 py-1 h-auto hover:text-white"
                     >
                       <span>{group.title}</span>
                       <ChevronRight className={cn(
@@ -105,7 +105,7 @@ const DesktopSidebar: React.FC<DesktopSidebarProps> = ({
                         variant={isActive(item.href) ? "default" : "ghost"}
                         className={cn(
                           "w-full justify-start text-sm font-medium py-2 h-auto",
-                          isActive(item.href) ? "bg-primary text-primary-foreground" : "hover:bg-muted/50",
+                          isActive(item.href) ? "bg-teal-700 text-white" : "text-slate-200 hover:bg-white/10",
                           item.highlight && !isActive(item.href) && "text-primary"
                         )}
                         asChild
@@ -162,7 +162,7 @@ const DesktopSidebar: React.FC<DesktopSidebarProps> = ({
         </nav>
         
         <div className={cn(
-          "p-4 mt-auto border-t border-gray-200 dark:border-gray-800",
+          "p-4 mt-auto border-t border-white/10",
           !isOpen && "flex justify-center"
         )}>
           {isOpen ? (
