@@ -2,6 +2,11 @@ import { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { useLocation } from "react-router-dom";
 import { seo } from "@/seo";
+import {
+  enforceStaticHead,
+  getStaticHeadSnapshot,
+  staticHeadMatchesRoute,
+} from "@/seo/staticHead.mjs";
 
 type SEOHeadProps = {
   title?: string;
@@ -29,14 +34,28 @@ function dropUnmanaged(selector: string) {
 }
 
 /**
- * Per-route head. After Helmet writes its tags, drop the static homepage
- * title, description and canonical so hydration cannot leave them in place.
+ * Per-route head. On the document that was served for this route, keep the
+ * static title, description and canonical exactly. Never replace them with
+ * a client template such as "… | NIEUWEVLOER.BE" or a canonical without a slash.
  */
 export default function SEOHead({ title, description, notFound = false }: SEOHeadProps) {
   const { pathname } = useLocation();
-  const resolved = seo.resolve(pathname, { title, description, notFound });
+  const locked = staticHeadMatchesRoute(getStaticHeadSnapshot(), pathname);
+  const resolved = locked
+    ? {
+        title: locked.title,
+        description: locked.description,
+        canonical: locked.canonical,
+        robots: undefined as string | undefined,
+        jsonLd: null as unknown,
+      }
+    : seo.resolve(pathname, { title, description, notFound });
 
   useEffect(() => {
+    if (locked) {
+      enforceStaticHead(getStaticHeadSnapshot(), pathname);
+      return;
+    }
     const managedTitle = document.querySelector("title[data-rh]");
     if (managedTitle) {
       document.querySelectorAll("title").forEach((el) => {
@@ -47,7 +66,7 @@ export default function SEOHead({ title, description, notFound = false }: SEOHea
     if (!resolved.canonical) {
       document.querySelectorAll('link[rel="canonical"]').forEach((el) => el.remove());
     }
-  }, [resolved.canonical, resolved.title, resolved.description, pathname]);
+  }, [locked, resolved.canonical, resolved.title, resolved.description, pathname]);
 
   return (
     <Helmet>
