@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import PageHeader from "@/components/PageHeader";
-import { Helmet } from "react-helmet-async";
+import SEOHead from "@/components/seo/SEOHead";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -44,17 +44,7 @@ const BlogPage = () => {
 
   return (
     <>
-      <Helmet>
-        <title>Blog | NieuweVloer.be</title>
-        <meta 
-          name="description" 
-          content="Tips, trends en inspiratie over tegelplaatsing, badkamerrenovatie en vloerwerken. Lees onze expert artikelen." 
-        />
-        <meta 
-          name="keywords" 
-          content="tegels blog, badkamer inspiratie, vloertegels tips, tegeltrends, vloer onderhoud, badkamerrenovatie" 
-        />
-      </Helmet>
+      <SEOHead />
 
       <Navbar />
       

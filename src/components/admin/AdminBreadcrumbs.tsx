@@ -1,5 +1,6 @@
 
 import { Link, useLocation } from 'react-router-dom';
+import { finalHref } from '@/seo/links.mjs';
 import { 
   Breadcrumb,
   BreadcrumbList,
@@ -42,7 +43,7 @@ const AdminBreadcrumbs = ({
       if (index < paths.length - 1) {
         breadcrumbs.push({
           label: path.charAt(0).toUpperCase() + path.slice(1),
-          path: currentPath
+          path: finalHref(`${currentPath}/`)
         });
       }
     });
@@ -58,7 +59,7 @@ const AdminBreadcrumbs = ({
       <BreadcrumbList>
         <BreadcrumbItem>
           <BreadcrumbLink asChild>
-            <Link to="/admin">
+            <Link to="/admin/">
               <Home className="h-4 w-4" />
             </Link>
           </BreadcrumbLink>
@@ -68,7 +69,7 @@ const AdminBreadcrumbs = ({
           <BreadcrumbItem key={index}>
             <BreadcrumbSeparator />
             <BreadcrumbLink asChild>
-              <Link to={item.path}>{item.label}</Link>
+              <Link to={finalHref(item.path)}>{item.label}</Link>
             </BreadcrumbLink>
           </BreadcrumbItem>
         ))}

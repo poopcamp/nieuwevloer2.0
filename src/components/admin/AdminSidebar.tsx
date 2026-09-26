@@ -1,6 +1,7 @@
 
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import { isPathActive } from '@/seo/links.mjs';
 import MobileSidebar from './sidebar/MobileSidebar';
 import DesktopSidebar from './sidebar/DesktopSidebar';
 import { useAuthActions } from '@/hooks/useAuthActions';
@@ -20,12 +21,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onClose }) => {
     Systeem: false,
   });
   
-  const isActive = (path: string) => {
-    if (path === '/admin' && location.pathname === '/admin') {
-      return true;
-    }
-    return path !== '/admin' && location.pathname.startsWith(path);
-  };
+  const isActive = (path: string) => isPathActive(location.pathname, path);
   
   const handleLogout = async () => {
     await signOut();

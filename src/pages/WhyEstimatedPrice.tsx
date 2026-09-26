@@ -14,7 +14,7 @@ const WhyEstimatedPrice = () => {
         <title>Waarom Richtprijs | NieuweVloer.be</title>
         <meta name="description" content="Ontdek waarom we met richtprijzen werken in plaats van vaste prijzen voor tegelprojecten. Elke situatie is uniek en vraagt om een persoonlijke benadering." />
         <meta name="keywords" content="richtprijs,offerte tegels,tegelprijs,prijsindicatie,tegelzetter" />
-        <link rel="canonical" href="https://nieuwevloer.be/waarom-richtprijs" />
+        <link rel="canonical" href="https://nieuwevloer.be/waarom-richtprijs/" />
       </Helmet>
       
       <Navbar />

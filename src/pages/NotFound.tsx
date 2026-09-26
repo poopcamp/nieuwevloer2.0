@@ -4,6 +4,7 @@ import { useLocation, Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
+import SEOHead from "@/components/seo/SEOHead";
 
 const NotFound = () => {
   const location = useLocation();
@@ -17,6 +18,7 @@ const NotFound = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
+      <SEOHead notFound />
       <Navbar />
       <main className="flex-grow flex items-center justify-center py-12 bg-neutral-50">
         <div className="text-center px-4">
