@@ -1,5 +1,5 @@
 
-import React from "react";
+import { lazy, Suspense } from "react";
 import {
   BrowserRouter as Router,
   Route,
@@ -37,10 +37,14 @@ import ServicesPage from "./pages/services/ServicesPage";
 import BlogPage from "./pages/blog/BlogPage";
 import ProjectsPage from "./pages/projects/ProjectsPage";
 import SingleBlogPage from "./pages/blog/SingleBlogPage";
+import { mappedSeoPaths } from "./seo";
 
 import { AuthProvider } from "./contexts/auth-context";
 import { BrandProvider } from "./contexts/brand-context";
 import ProtectedRoute from "./components/admin/ProtectedRoute";
+
+const MappedSeoPage = lazy(() => import("./pages/seo/MappedSeoPage"));
+const DienstenDetailPage = lazy(() => import("./pages/services/DienstenDetailPage"));
 
 function App() {
   return (
@@ -48,15 +52,26 @@ function App() {
       <Router>
         <AuthProvider>
           <BrandProvider>
+            <Suspense fallback={<div className="p-8 text-center">Laden…</div>}>
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/configurator" element={<Configurator />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/diensten" element={<ServicesPage />} />
+              <Route path="/diensten/vloeren" element={<DienstenDetailPage />} />
+              <Route path="/diensten/terrassen" element={<DienstenDetailPage />} />
+              <Route path="/diensten/badkamerrenovatie" element={<DienstenDetailPage />} />
               <Route path="/gids" element={<GuidesPage />} />
               <Route path="/blog" element={<BlogPage />} />
               <Route path="/blog/:postId" element={<SingleBlogPage />} />
               <Route path="/projecten" element={<ProjectsPage />} />
+              {mappedSeoPaths.map((routePath) => (
+                <Route
+                  key={routePath}
+                  path={routePath.slice(0, -1)}
+                  element={<MappedSeoPage />}
+                />
+              ))}
 
               <Route path="/admin/login" element={<AdminLogin />} />
               <Route path="/admin" element={<ProtectedRoute />}>
@@ -81,6 +96,7 @@ function App() {
 
               <Route path="*" element={<NotFound />} />
             </Routes>
+            </Suspense>
           </BrandProvider>
         </AuthProvider>
       </Router>

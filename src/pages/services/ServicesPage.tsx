@@ -3,7 +3,7 @@ import React from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import PageHeader from "@/components/PageHeader";
-import { Helmet } from "react-helmet-async";
+import SEOHead from "@/components/seo/SEOHead";
 import { Button } from "@/components/ui/button";
 import { Clock, CheckCircle, Wrench, Award } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -38,11 +38,7 @@ const ServicesPage = () => {
 
   return (
     <>
-      <Helmet>
-        <title>Onze Diensten | NieuweVloer.be</title>
-        <meta name="description" content="Ontdek ons volledige aanbod aan professionele tegelplaatsing, badkamerrenovatie en vloerwerken diensten met 6 jaar garantie." />
-        <meta name="keywords" content="tegelplaatsing, vloerwerken, badkamerrenovatie, natuursteen, vloertegels, wandtegels" />
-      </Helmet>
+      <SEOHead />
 
       <Navbar />
       

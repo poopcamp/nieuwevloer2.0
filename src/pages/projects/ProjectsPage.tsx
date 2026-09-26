@@ -1,6 +1,6 @@
 
 import React from "react";
-import { Helmet } from "react-helmet-async";
+import SEOHead from "@/components/seo/SEOHead";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import PageHeader from "@/components/PageHeader";
@@ -9,17 +9,7 @@ import { Button } from "@/components/ui/button";
 const ProjectsPage: React.FC = () => {
   return (
     <>
-      <Helmet>
-        <title>Projecten | NieuweVloer.be</title>
-        <meta 
-          name="description" 
-          content="Bekijk onze recente tegelprojecten en badkamerrenovaties. Professionele tegelwerken uitgevoerd door ervaren vakmensen."
-        />
-        <meta 
-          name="keywords" 
-          content="tegelprojecten, badkamerrenovaties, tegelwerken portfolio, renovatieprojecten"
-        />
-      </Helmet>
+      <SEOHead />
 
       <Navbar />
       

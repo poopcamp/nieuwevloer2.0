@@ -1,0 +1,42 @@
+{
+  "/diensten/": {
+    "title": "Onze Diensten | NieuweVloer.be",
+    "description": "Ontdek ons volledige aanbod aan professionele tegelplaatsing, badkamerrenovatie en vloerwerken diensten met 6 jaar garantie.",
+    "canonical": "https://nieuwevloer.be/diensten/"
+  },
+  "/diensten/vloeren/": {
+    "title": "Vloeren leggen | Tegelvloer & keramiek | NieuweVloer",
+    "description": "Vloeren leggen in keramische tegels en grootformaat, door een vakman uit Maldegem. Vraag een offerte aan via het formulier of stuur een WhatsApp.",
+    "canonical": "https://nieuwevloer.be/diensten/vloeren/"
+  },
+  "/diensten/terrassen/": {
+    "title": "Terrassen | Keramische terrastegels | NieuweVloer",
+    "description": "Keramische terrastegels en platines, gelegd door een vakman uit Maldegem. Vraag een offerte aan via het formulier of stuur een WhatsApp.",
+    "canonical": "https://nieuwevloer.be/diensten/terrassen/"
+  },
+  "/diensten/badkamerrenovatie/": {
+    "title": "Badkamerrenovatie | Tegels & douche | NieuweVloer",
+    "description": "Badkamerrenovatie met tegels, inloopdouche en afwerking door een vakman uit Maldegem. Vraag een offerte aan via het formulier of stuur een WhatsApp.",
+    "canonical": "https://nieuwevloer.be/diensten/badkamerrenovatie/"
+  },
+  "/contact/": {
+    "title": "Contact | NieuweVloer.be - Professionele tegelplaatsing",
+    "description": "Neem contact op met NieuweVloer.be voor uw vragen over tegelplaatsing, vloeren en badkamerrenovatie in Maldegem en omgeving (30km). Vraag een vrijblijvende offerte aan.",
+    "canonical": "https://nieuwevloer.be/contact/"
+  },
+  "/configurator/": {
+    "title": "Tegelconfigurator | NieuweVloer.be",
+    "description": "Bereken in 1 minuut uw richtprijs voor tegels en plaatsing. Eenvoudig en snel een accurate prijsindicatie krijgen.",
+    "canonical": "https://nieuwevloer.be/configurator/"
+  },
+  "/gids/": {
+    "title": "Gids voor Tegelwerken | NieuweVloer.be",
+    "description": "Ontdek alles over professionele tegelplaatsing, materialen, technieken en onderhoud in onze uitgebreide gids.",
+    "canonical": "https://nieuwevloer.be/gids/"
+  },
+  "/projecten/": {
+    "title": "Projecten | NieuweVloer.be",
+    "description": "Bekijk onze recente tegelprojecten en badkamerrenovaties. Professionele tegelwerken uitgevoerd door ervaren vakmensen.",
+    "canonical": "https://nieuwevloer.be/projecten/"
+  }
+}

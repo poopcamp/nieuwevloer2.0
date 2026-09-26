@@ -1,5 +1,5 @@
 
-import { Helmet } from "react-helmet-async";
+import SEOHead from "@/components/seo/SEOHead";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Toaster } from "@/components/ui/toaster";
@@ -48,15 +48,7 @@ const Configurator = () => {
   
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
-      <Helmet>
-        <title>Tegelconfigurator | NieuweVloer.be</title>
-        <meta name="description" content="Bereken in 1 minuut uw richtprijs voor tegels en plaatsing. Eenvoudig en snel een accurate prijsindicatie krijgen." />
-        <meta name="keywords" content="tegelconfigurator,tegels berekenen,tegelprijs,vloertegels,wandtegels,offerte tegels" />
-        <meta property="og:title" content="Tegelconfigurator | NieuweVloer.be" />
-        <meta property="og:description" content="Bereken in 1 minuut uw richtprijs voor tegels en plaatsing. Stap voor stap naar een accurate offerte." />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://nieuwevloer.be/configurator" />
-      </Helmet>
+      <SEOHead />
       
       <Navbar />
       <main className="flex-grow py-6 md:py-12">

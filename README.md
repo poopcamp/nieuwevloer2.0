@@ -118,14 +118,16 @@ Allow CORS from the NV admin origin. Then set `VITE_NIEUWTERRAS_ADMIN_API` + `VI
 
 ## Home Server deploy
 
-This repo **is** the live admin SPA.
+This repo **is** the live admin SPA. Admin and the public marketing site do not share a copy step.
+
+Public pages (`npm run build:seo`) deploy **only** through `scripts/deploy-marketing.sh`. That script backs up each existing `index.html`, refuses to write `live/dist/index.html`, and aborts unless the vloerder-vanderheyden title contains `Vanderheyden`. Never rsync `web/dist` or `dist/` into the live/dist root. See `scripts/DEPLOY-SEO.md`.
 
 ```
-npm ci --legacy-peer-deps && npm run build
-# sync dist/ → /mnt/TheLord/Nieuwevloer/nieuwevloer/live/dist
+npm ci --legacy-peer-deps && npm run build:seo
+scripts/deploy-marketing.sh dist /mnt/TheLord/Nieuwevloer/nieuwevloer/live/dist
 ```
 
-SPA fallback to `index.html` for `/admin`, `/admin/login`, `/admin/leads`, `/admin/nieuwterras`.
+Admin routes (`/admin`, `/admin/login`, `/admin/leads`, `/admin/nieuwterras`) stay on the admin SPA. Do not copy the built homepage over the locked live `index.html`. Nginx should use `error_page 404 /404.html;` so unknown URLs do not return the homepage head.
 
 ## Contact
 
