@@ -29,7 +29,7 @@ const LocalSEOTemplate = ({
         <title>{title}</title>
         <meta name="description" content={metaDescription} />
         <meta name="robots" content="index, follow" />
-        <link rel="canonical" href={`https://nieuwevloer.be/locaties/${city.toLowerCase().replace(/\s+/g, "-")}`} />
+        <link rel="canonical" href={`https://nieuwevloer.be/locaties/${city.toLowerCase().replace(/\s+/g, "-")}/`} />
         <meta property="og:title" content={title} />
         <meta property="og:description" content={metaDescription} />
         <meta property="og:type" content="website" />

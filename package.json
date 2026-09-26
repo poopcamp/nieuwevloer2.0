@@ -9,6 +9,7 @@
     "build:seo": "vite build && node scripts/prerender-meta.mjs",
     "verify:seo": "node scripts/verify-seo.mjs",
     "test:seo-hydration": "node scripts/verify-seo-hydration.mjs",
+    "test:seo-links": "node scripts/verify-seo-links.mjs",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
     "preview": "vite preview"

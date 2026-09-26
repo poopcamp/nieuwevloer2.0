@@ -19,22 +19,22 @@ const Footer = () => {
             <h3 className="text-lg font-semibold text-gray-200">Diensten</h3>
             <ul className="space-y-2">
               <li>
-                <Link to="/vloertegelplaatsing" className="text-sm text-gray-400 hover:text-primary">
+                <Link to="/diensten/vloeren/" className="text-sm text-gray-400 hover:text-primary">
                   Vloertegels
                 </Link>
               </li>
               <li>
-                <Link to="/wandtegelplaatsing" className="text-sm text-gray-400 hover:text-primary">
+                <Link to="/diensten/vloeren/" className="text-sm text-gray-400 hover:text-primary">
                   Wandtegels
                 </Link>
               </li>
               <li>
-                <Link to="/badkamerrenovatie" className="text-sm text-gray-400 hover:text-primary">
+                <Link to="/diensten/badkamerrenovatie/" className="text-sm text-gray-400 hover:text-primary">
                   Badkamer renovatie
                 </Link>
               </li>
               <li>
-                <Link to="/totale-badkamerrenovatie" className="text-sm text-gray-400 hover:text-primary">
+                <Link to="/diensten/badkamerrenovatie/" className="text-sm text-gray-400 hover:text-primary">
                   Sanitair
                 </Link>
               </li>
@@ -45,27 +45,27 @@ const Footer = () => {
             <h3 className="text-lg font-semibold text-gray-200">Links</h3>
             <ul className="space-y-2">
               <li>
-                <Link to="/configurator" className="text-sm text-gray-400 hover:text-primary">
+                <Link to="/configurator/" className="text-sm text-gray-400 hover:text-primary">
                   Tegelconfigurator
                 </Link>
               </li>
               <li>
-                <Link to="/contact" className="text-sm text-gray-400 hover:text-primary">
+                <Link to="/contact/" className="text-sm text-gray-400 hover:text-primary">
                   Offerte aanvragen
                 </Link>
               </li>
               <li>
-                <Link to="/contact" className="text-sm text-gray-400 hover:text-primary">
+                <Link to="/contact/" className="text-sm text-gray-400 hover:text-primary">
                   Contact
                 </Link>
               </li>
               <li>
-                <Link to="/privacy" className="text-sm text-gray-400 hover:text-primary">
+                <Link to="/privacy-beleid/" className="text-sm text-gray-400 hover:text-primary">
                   Privacy & Voorwaarden
                 </Link>
               </li>
               <li>
-                <Link to="/gdpr-verzoek" className="text-sm text-gray-400 hover:text-primary">
+                <Link to="/privacy-beleid/" className="text-sm text-gray-400 hover:text-primary">
                   GDPR Verzoek
                 </Link>
               </li>
@@ -96,7 +96,7 @@ const Footer = () => {
             &copy; {new Date().getFullYear()} NieuweVloer.be | Vakmanschap sinds 2017
           </div>
           <div className="flex items-center space-x-4">
-            <Link to="/privacy" className="text-gray-500 hover:text-gray-300 text-sm">
+            <Link to="/privacy-beleid/" className="text-gray-500 hover:text-gray-300 text-sm">
               Privacy
             </Link>
           </div>
