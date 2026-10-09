@@ -99,7 +99,7 @@ export function Navigate(props: NavigateProps) {
 
 export function useNavigate() {
   const navigate = RR.useNavigate();
-  return (to: To | number, options?: Parameters<typeof navigate>[1]) => {
+  return (to: To | number, options?: { replace?: boolean; state?: unknown }) => {
     if (typeof to === "number") return navigate(to);
     return navigate(mapTo(to) as To, options);
   };
