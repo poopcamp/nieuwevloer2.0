@@ -1,6 +1,7 @@
 
 import { ChevronRight, Home } from "lucide-react";
 import { Link } from "react-router-dom";
+import { finalHref } from "@/seo/links.mjs";
 import { 
   Breadcrumb,
   BreadcrumbItem,
@@ -26,7 +27,7 @@ const AdminBreadcrumbs = ({ items, currentPage }: AdminBreadcrumbsProps) => {
       <BreadcrumbList>
         <BreadcrumbItem>
           <BreadcrumbLink asChild>
-            <Link to="/admin" className="flex items-center hover:text-primary transition-colors">
+            <Link to="/admin/" className="flex items-center hover:text-primary transition-colors">
               <Home className="h-4 w-4" />
             </Link>
           </BreadcrumbLink>
@@ -37,7 +38,7 @@ const AdminBreadcrumbs = ({ items, currentPage }: AdminBreadcrumbsProps) => {
             <BreadcrumbSeparator />
             <BreadcrumbLink asChild>
               <Link 
-                to={item.path}
+                to={finalHref(item.path)}
                 className="hover:text-primary transition-colors"
               >
                 {item.label}

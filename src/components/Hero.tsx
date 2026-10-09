@@ -60,12 +60,12 @@ const Hero = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  // Get the image URL (either from database or fallback)
+  // Prefer DB image; never fall back to *.supabase.co (Safari "Load failed").
   const getImageUrl = () => {
-    if (heroImage && heroImage.url) {
+    if (heroImage?.url && !/supabase\.co/i.test(heroImage.url)) {
       return heroImage.url;
     }
-    return 'https://ssvgnlbzztxobvilucvk.supabase.co/storage/v1/object/public/assets//Hero-background.png';
+    return "/lovable-uploads/5b1a9d0d-5d51-4f89-8340-61bbe5289c3a.png";
   };
 
   return (
@@ -122,7 +122,7 @@ const Hero = () => {
               size={isMobile ? "default" : "lg"}
               className="bg-white/10 backdrop-blur-sm border-white text-white hover:bg-white/20 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 w-full sm:w-auto"
             >
-              <Link to="/services" className="whitespace-nowrap">Ontdek onze diensten</Link>
+              <Link to="/diensten/" className="whitespace-nowrap">Ontdek onze diensten</Link>
             </Button>
           </div>
         </div>

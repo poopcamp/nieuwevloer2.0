@@ -48,13 +48,13 @@ const Footer = () => {
                 <Link to="/" className="text-gray-600 hover:text-primary transition-colors">Home</Link>
               </li>
               <li>
-                <Link to="/configurator" className="text-gray-600 hover:text-primary transition-colors">Prijscalculator</Link>
+                <Link to="/configurator/" className="text-gray-600 hover:text-primary transition-colors">Prijscalculator</Link>
               </li>
               <li>
-                <Link to="/gidsen" className="text-gray-600 hover:text-primary transition-colors">Tegelgidsen</Link>
+                <Link to="/gids/" className="text-gray-600 hover:text-primary transition-colors">Tegelgidsen</Link>
               </li>
               <li>
-                <Link to="/contact" className="text-gray-600 hover:text-primary transition-colors">Contact</Link>
+                <Link to="/contact/" className="text-gray-600 hover:text-primary transition-colors">Contact</Link>
               </li>
             </ul>
           </div>
@@ -64,16 +64,16 @@ const Footer = () => {
             <h3 className="font-medium text-gray-900 mb-4">Diensten</h3>
             <ul className="space-y-3">
               <li>
-                <Link to="/vloertegelplaatsing" className="text-gray-600 hover:text-primary transition-colors">Vloertegels</Link>
+                <Link to="/diensten/vloeren/" className="text-gray-600 hover:text-primary transition-colors">Vloertegels</Link>
               </li>
               <li>
-                <Link to="/wandtegelplaatsing" className="text-gray-600 hover:text-primary transition-colors">Wandtegels</Link>
+                <Link to="/diensten/vloeren/" className="text-gray-600 hover:text-primary transition-colors">Wandtegels</Link>
               </li>
               <li>
-                <Link to="/badkamerrenovatie" className="text-gray-600 hover:text-primary transition-colors">Badkamerrenovatie</Link>
+                <Link to="/diensten/badkamerrenovatie/" className="text-gray-600 hover:text-primary transition-colors">Badkamerrenovatie</Link>
               </li>
               <li>
-                <Link to="/totale-badkamerrenovatie" className="text-gray-600 hover:text-primary transition-colors">Sanitair</Link>
+                <Link to="/diensten/badkamerrenovatie/" className="text-gray-600 hover:text-primary transition-colors">Sanitair</Link>
               </li>
             </ul>
           </div>
@@ -107,8 +107,8 @@ const Footer = () => {
             © {currentYear} NieuweVloer.be — Alle rechten voorbehouden
           </p>
           <div className="flex items-center space-x-6">
-            <Link to="/privacy" className="text-sm text-gray-500 hover:text-primary transition-colors">Privacybeleid</Link>
-            <Link to="/gdpr-verzoek" className="text-sm text-gray-500 hover:text-primary transition-colors">GDPR Verzoek</Link>
+            <Link to="/privacy-beleid/" className="text-sm text-gray-500 hover:text-primary transition-colors">Privacybeleid</Link>
+            <Link to="/privacy-beleid/" className="text-sm text-gray-500 hover:text-primary transition-colors">GDPR Verzoek</Link>
           </div>
         </div>
       </div>

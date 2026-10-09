@@ -1,5 +1,6 @@
 
 import { useNavigate, useLocation } from "react-router-dom";
+import { isPathActive } from "@/seo/links.mjs";
 
 export const useAdminNavigation = () => {
   const navigate = useNavigate();
@@ -9,16 +10,7 @@ export const useAdminNavigation = () => {
     navigate(path);
   };
 
-  const isActive = (path: string) => {
-    // Special case for root admin path
-    if (path === '/admin' && location.pathname === '/admin') {
-      return true;
-    }
-    
-    // For other admin paths, check if the current path starts with the given path
-    // This ensures that sub-pages also show their parent as active
-    return path !== '/admin' && location.pathname.startsWith(path);
-  };
+  const isActive = (path: string) => isPathActive(location.pathname, path);
 
   return {
     handleNavigation,

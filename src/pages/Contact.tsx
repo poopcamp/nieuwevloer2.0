@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { Helmet } from "react-helmet-async";
+import SEOHead from "@/components/seo/SEOHead";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ContactForm from "@/components/contact/ContactForm";
@@ -17,11 +17,7 @@ const Contact = () => {
   
   return (
     <div className="min-h-screen flex flex-col">
-      <Helmet>
-        <title>Contact | NieuweVloer.be - Professionele tegelplaatsing</title>
-        <meta name="description" content="Neem contact op met NieuweVloer.be voor uw vragen over tegelplaatsing, vloeren en badkamerrenovatie in Maldegem en omgeving (30km). Vraag een vrijblijvende offerte aan." />
-        <meta name="keywords" content="contact tegelzetter,contact vloerder,offerte tegels,contact nieuwevloer,tegelplaatsing maldegem,vloeren eeklo,tegelzetter knokke" />
-      </Helmet>
+      <SEOHead />
       
       <Navbar />
       <main className="flex-grow py-12 bg-neutral-50">

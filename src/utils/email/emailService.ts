@@ -12,10 +12,6 @@ export async function sendEmailRequest(data: EmailSendOptions): Promise<EmailRes
     console.log("[emailService] With project type:", data.projectType);
     console.log("[emailService] Full payload being sent:", JSON.stringify(data, null, 2));
     
-    // Create an AbortController to handle request timeout
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), EMAIL_CONFIG.DEFAULT_TIMEOUT);
-    
     try {
       // Make sure quick calculator type is consistent and properly formatted
       if (data.projectType === "quick_calculator") {
@@ -29,17 +25,16 @@ export async function sendEmailRequest(data: EmailSendOptions): Promise<EmailRes
       
       console.log("[emailService] Invoking edge function with payload:", JSON.stringify(data, null, 2));
       
-      // Direct call to the edge function
-      const { data: responseData, error } = await supabase.functions.invoke(
-        "send-confirmation",
-        { 
-          body: data,
-          signal: controller.signal
-        }
-      );
-      
-      // Clear the timeout since the request completed
-      clearTimeout(timeoutId);
+      // FunctionInvokeOptions has no AbortSignal; race a timeout instead.
+      const invokePromise = supabase.functions.invoke("send-confirmation", { body: data });
+      const timeoutPromise = new Promise<never>((_, reject) => {
+        setTimeout(() => {
+          const err = new Error("Request timed out");
+          err.name = "AbortError";
+          reject(err);
+        }, EMAIL_CONFIG.DEFAULT_TIMEOUT);
+      });
+      const { data: responseData, error } = await Promise.race([invokePromise, timeoutPromise]);
       
       console.log("[emailService] Edge function response:", responseData);
       
@@ -61,9 +56,6 @@ export async function sendEmailRequest(data: EmailSendOptions): Promise<EmailRes
         adminEmail: responseData?.adminEmail
       };
     } catch (error: any) {
-      // Clear the timeout if there was an error
-      clearTimeout(timeoutId);
-      
       // Handle abort/timeout
       if (error.name === 'AbortError') {
         console.error("[emailService] Request timed out");

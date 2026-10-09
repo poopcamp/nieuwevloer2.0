@@ -1,9 +1,10 @@
 
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { Helmet } from "react-helmet-async";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import SEOHead from "@/components/seo/SEOHead";
+import { seo } from "@/seo";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -12,11 +13,14 @@ import { BlogPost } from "@/types/blog";
 
 const SingleBlogPage = () => {
   const { postId } = useParams<{ postId: string }>();
+  const isKnownPost = Boolean(postId && seo.has(`/blog/${postId}/`));
   const [post, setPost] = useState<BlogPost | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(!isKnownPost);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    if (isKnownPost) return;
+
     const fetchBlogPost = async () => {
       try {
         setLoading(true);
@@ -47,7 +51,7 @@ const SingleBlogPage = () => {
     };
     
     fetchBlogPost();
-  }, [postId]);
+  }, [postId, isKnownPost]);
 
   const formatDate = (dateString: string) => {
     const options: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'long', year: 'numeric' };
@@ -62,19 +66,56 @@ const SingleBlogPage = () => {
 
   return (
     <>
-      <Helmet>
-        <title>{post ? `${post.title} | NieuweVloer.be` : "Artikel | NieuweVloer.be"}</title>
-        <meta 
-          name="description" 
-          content={post?.content?.substring(0, 160) || "Lees ons blog artikel over tegelwerken en renovaties."}
-        />
-      </Helmet>
+      <SEOHead
+        title={
+          isKnownPost
+            ? undefined
+            : post
+              ? `${post.title} | NieuweVloer.be`
+              : "Artikel | NieuweVloer"
+        }
+        description={
+          isKnownPost
+            ? undefined
+            : post?.content?.substring(0, 160) ||
+              "Lees dit artikel van NieuweVloer over vloeren, badkamers en terrassen."
+        }
+      />
 
       <Navbar />
       
       <main className="pt-16 md:pt-20 min-h-screen">
         <div className="container mx-auto px-4 py-12">
-          {loading ? (
+          {isKnownPost ? (
+            <div className="max-w-4xl mx-auto">
+              <Button asChild variant="outline" className="mb-8">
+                <Link to="/blog" className="flex items-center">
+                  <ChevronLeft className="mr-2 h-4 w-4" />
+                  Terug naar alle artikelen
+                </Link>
+              </Button>
+              <article>
+                <h1 className="text-3xl md:text-4xl font-bold mb-4">
+                  {seo.resolve(`/blog/${postId}/`).title.split("|")[0].trim()}
+                </h1>
+                <p className="text-lg text-gray-700 mb-6">
+                  {/oprit/i.test(seo.resolve(`/blog/${postId}/`).description)
+                    ? "NieuweVloer deelt praktische tips over vloeren, badkamers en terrassen vanuit Maldegem."
+                    : seo.resolve(`/blog/${postId}/`).description}
+                </p>
+                <p className="text-gray-800 mb-8">
+                  Bel{" "}
+                  <a href="tel:0479304986" className="font-semibold text-primary">
+                    0479 30 49 86
+                  </a>{" "}
+                  of vraag een offerte aan.
+                </p>
+                <Button asChild>
+                  <Link to="/contact">Offerte aanvragen</Link>
+                </Button>
+              </article>
+            </div>
+          ) : loading ? (
             <div className="max-w-4xl mx-auto">
               <Skeleton className="h-8 w-48 mb-4" />
               <Skeleton className="h-4 w-32 mb-8" />

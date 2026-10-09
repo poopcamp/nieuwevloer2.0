@@ -165,8 +165,10 @@ const NieuwTerrasOverviewPanel = ({ data, loading, compact = false }: NieuwTerra
             <p className="text-xs text-stone-500">Bron: {data.sources.join(" · ")}</p>
           ) : null}
 
-          {!compact && data?.errors.length ? (
-            <p className="text-xs text-red-700">{data.errors.join(" · ")}</p>
+          {!compact && data?.errors.filter((err) => !/unauthorized|permission|jwt|401/i.test(err)).length ? (
+            <p className="text-xs text-red-700">
+              {data.errors.filter((err) => !/unauthorized|permission|jwt|401/i.test(err)).join(" · ")}
+            </p>
           ) : null}
 
           {data?.contractNeeded && !compact && (
