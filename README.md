@@ -50,7 +50,7 @@ The codebase is organized as follows:
 
 ## Admin login (P0)
 
-This repo is the **admin SPA source** (`src/pages/admin/*`, `src/components/admin/*`).
+This repo is the **GoTrue admin SPA source** (`src/pages/admin/*`, `src/components/admin/*`).
 
 Frontend auth **must** call `https://api.nieuwevloer.be` (self-hosted GoTrue on the NAS).  
 Do **not** point the browser at `*.supabase.co` — that reintroduces Safari/WebKit **Load failed**.
@@ -60,7 +60,9 @@ Do **not** point the browser at `*.supabase.co` — that reintroduces Safari/Web
 - Default API URL: `https://api.nieuwevloer.be` (`*.supabase.co` env values are ignored)
 - Anon key: **only** `VITE_SUPABASE_ANON_KEY` (no hardcoded JWT in the repo)
 
-Live marketing site may also be built from `prestige-driveways-patios`. Keep this admin package free of supabase.co so an admin rebuild cannot reintroduce Load failed.
+**Live today (2026-10):** `https://nieuwevloer.be/admin/` serves a separate **local ops hub** (`HUB_PASSWORD`, `/admin/api`, `data/db.json`, `mode:local`). That hub source is **not** in this GitHub repo. Deploying this SPA’s `dist/` over `/admin` would replace the hub — only do that intentionally after GoTrue anon key + HS cutover.
+
+Live marketing (Playfair/Inter, `/richtprijs-calculator`, `/project-aanvraag`) is also a separate build (see `prestige-driveways-patios` / HS). Keep this package free of `supabase.co` so an admin rebuild cannot reintroduce Load failed.
 
 ## Environment variables (Vite build-time)
 
@@ -118,14 +120,16 @@ Allow CORS from the NV admin origin. Then set `VITE_NIEUWTERRAS_ADMIN_API` + `VI
 
 ## Home Server deploy
 
-This repo **is** the live admin SPA.
+This repo **is** the live admin SPA. Admin and the public marketing site do not share a copy step.
+
+Public pages (`npm run build:seo`) deploy **only** through `scripts/deploy-marketing.sh`. That script backs up each existing `index.html`, refuses to write `live/dist/index.html`, and aborts unless the vloerder-vanderheyden title contains `Vanderheyden`. Never rsync `web/dist` or `dist/` into the live/dist root. See `scripts/DEPLOY-SEO.md`.
 
 ```
-npm ci --legacy-peer-deps && npm run build
-# sync dist/ → /mnt/TheLord/Nieuwevloer/nieuwevloer/live/dist
+npm ci --legacy-peer-deps && npm run build:seo
+scripts/deploy-marketing.sh dist /mnt/TheLord/Nieuwevloer/nieuwevloer/live/dist
 ```
 
-SPA fallback to `index.html` for `/admin`, `/admin/login`, `/admin/leads`, `/admin/nieuwterras`.
+Admin routes (`/admin`, `/admin/login`, `/admin/leads`, `/admin/nieuwterras`) stay on the admin SPA. Do not copy the built homepage over the locked live `index.html`. Nginx should use `error_page 404 /404.html;` so unknown URLs do not return the homepage head.
 
 ## Contact
 

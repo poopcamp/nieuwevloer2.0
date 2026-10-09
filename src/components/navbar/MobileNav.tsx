@@ -40,29 +40,29 @@ const MobileNav: React.FC<MobileNavProps> = ({
         <MobileNavLink to="/" textColorClass={textColorClass}>
           Home
         </MobileNavLink>
-        <MobileNavLink to="/diensten" textColorClass={textColorClass}>
+        <MobileNavLink to="/diensten/" textColorClass={textColorClass}>
           Diensten
         </MobileNavLink>
-        <MobileNavLink to="/configurator" textColorClass={textColorClass}>
+        <MobileNavLink to="/configurator/" textColorClass={textColorClass}>
           Configurator
         </MobileNavLink>
-        <MobileNavLink to="/projecten" textColorClass={textColorClass}>
+        <MobileNavLink to="/projecten/" textColorClass={textColorClass}>
           Projecten
         </MobileNavLink>
-        <MobileNavLink to="/gids" textColorClass={textColorClass}>
+        <MobileNavLink to="/gids/" textColorClass={textColorClass}>
           Tegels gids
         </MobileNavLink>
-        <MobileNavLink to="/blog" textColorClass={textColorClass}>
+        <MobileNavLink to="/blog/" textColorClass={textColorClass}>
           Blog
         </MobileNavLink>
-        <MobileNavLink to="/contact" textColorClass={textColorClass}>
+        <MobileNavLink to="/contact/" textColorClass={textColorClass}>
           Contact
         </MobileNavLink>
         
         {isAdmin && (
           <div className="pt-2 mt-2 border-t border-gray-200 dark:border-gray-700 w-full">
             <Button asChild variant="default" className="w-full">
-              <MobileNavLink to="/admin" textColorClass={textColorClass}>
+              <MobileNavLink to="/admin/" textColorClass={textColorClass}>
                 Admin Dashboard
               </MobileNavLink>
             </Button>

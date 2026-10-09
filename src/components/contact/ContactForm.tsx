@@ -20,7 +20,8 @@ const ContactForm = ({ onSubmitSuccess }: ContactFormProps) => {
     emailStatus,
     handleChange,
     handleCheckboxChange,
-    handleSubmit
+    handleSubmit,
+    fieldErrors,
   } = useContactForm(onSubmitSuccess);
 
   return (
@@ -35,11 +36,12 @@ const ContactForm = ({ onSubmitSuccess }: ContactFormProps) => {
         <ErrorMessage error={submitError} />
       )}
       
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-4" noValidate>
         <FormFields 
           formData={formData}
           handleChange={handleChange}
-          handleCheckboxChange={handleCheckboxChange} // Pass handleCheckboxChange to FormFields
+          handleCheckboxChange={handleCheckboxChange}
+          fieldErrors={fieldErrors}
         />
         
         <SubmitButton isSubmitting={isSubmitting} />

@@ -11,9 +11,10 @@ interface FormFieldsProps {
   formData: ContactFormData;
   handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   handleCheckboxChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  fieldErrors?: Partial<Record<keyof ContactFormData | "privacy_agreement", string>>;
 }
 
-const FormFields = ({ formData, handleChange, handleCheckboxChange }: FormFieldsProps) => {
+const FormFields = ({ formData, handleChange, handleCheckboxChange, fieldErrors = {} }: FormFieldsProps) => {
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -26,7 +27,10 @@ const FormFields = ({ formData, handleChange, handleCheckboxChange }: FormFields
             onChange={handleChange}
             placeholder="Uw volledige naam"
             required
+            aria-invalid={Boolean(fieldErrors.name)}
+            className={fieldErrors.name ? "border-red-500" : undefined}
           />
+          {fieldErrors.name && <p className="text-sm text-red-600">{fieldErrors.name}</p>}
         </div>
         
         <div className="space-y-2">
@@ -39,7 +43,10 @@ const FormFields = ({ formData, handleChange, handleCheckboxChange }: FormFields
             onChange={handleChange}
             placeholder="voorbeeld@email.be"
             required
+            aria-invalid={Boolean(fieldErrors.email)}
+            className={fieldErrors.email ? "border-red-500" : undefined}
           />
+          {fieldErrors.email && <p className="text-sm text-red-600">{fieldErrors.email}</p>}
         </div>
       </div>
       
@@ -53,7 +60,10 @@ const FormFields = ({ formData, handleChange, handleCheckboxChange }: FormFields
           onChange={handleChange}
           placeholder="+32 ..."
           required
+          aria-invalid={Boolean(fieldErrors.phone)}
+          className={fieldErrors.phone ? "border-red-500" : undefined}
         />
+        {fieldErrors.phone && <p className="text-sm text-red-600">{fieldErrors.phone}</p>}
       </div>
       
       <div className="space-y-2">
@@ -66,8 +76,10 @@ const FormFields = ({ formData, handleChange, handleCheckboxChange }: FormFields
           placeholder="Stel uw vraag of vertel ons meer over uw project..."
           rows={5}
           required
-          className="resize-y min-h-[120px]"
+          className={`resize-y min-h-[120px]${fieldErrors.message ? " border-red-500" : ""}`}
+          aria-invalid={Boolean(fieldErrors.message)}
         />
+        {fieldErrors.message && <p className="text-sm text-red-600">{fieldErrors.message}</p>}
       </div>
       
       <div className="flex items-start space-x-2 pt-2">
@@ -100,23 +112,31 @@ const FormFields = ({ formData, handleChange, handleCheckboxChange }: FormFields
       </div>
       
       <div className="flex items-start space-x-2 pt-2">
-        <Checkbox 
-          id="privacy-agreement" 
+        <Checkbox
+          id="privacy-agreement"
           name="privacy_agreement"
-          checked={true}
+          checked={Boolean(formData.privacy_agreement)}
           className="mt-1"
-          required
           aria-required={true}
-          disabled // Altijd aangevinkt, verplicht voor formulier
+          aria-invalid={Boolean(fieldErrors.privacy_agreement)}
+          onCheckedChange={(checked) => {
+            const event = {
+              target: {
+                name: "privacy_agreement",
+                checked: checked === true,
+              },
+            } as React.ChangeEvent<HTMLInputElement>;
+            handleCheckboxChange(event);
+          }}
         />
         <div className="text-sm text-gray-600">
           <label htmlFor="privacy-agreement" className="cursor-pointer">
-            Door dit formulier te verzenden ga ik akkoord met de <Link to="/privacy" className="text-primary hover:underline" target="_blank">privacyvoorwaarden</Link> en geef ik toestemming om mijn gegevens te verwerken voor het beantwoorden van mijn vraag conform de GDPR/AVG.
+            Ik ga akkoord met de <Link to="/privacy-beleid/" className="text-primary hover:underline" target="_blank">privacyvoorwaarden</Link> en geef toestemming om mijn gegevens te verwerken voor het beantwoorden van mijn vraag.
             <span className="text-red-500">*</span>
           </label>
-          <p className="mt-1 text-xs">
-            U kunt uw rechten uitoefenen (inzage, correctie, verwijdering) via ons <Link to="/gdpr-verzoek" className="text-primary hover:underline">GDPR-verzoekformulier</Link>.
-          </p>
+          {fieldErrors.privacy_agreement && (
+            <p className="mt-1 text-sm text-red-600">{fieldErrors.privacy_agreement}</p>
+          )}
         </div>
       </div>
     </div>

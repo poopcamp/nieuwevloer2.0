@@ -3,17 +3,13 @@ import React from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import PageHeader from "@/components/PageHeader";
-import { Helmet } from "react-helmet-async";
+import SEOHead from "@/components/seo/SEOHead";
 import TegelwerkenGids from "@/components/guides/TegelwerkenGids";
 
 const GuidesPage = () => {
   return (
     <>
-      <Helmet>
-        <title>Gids voor Tegelwerken | NieuweVloer.be</title>
-        <meta name="description" content="Ontdek alles over professionele tegelplaatsing, materialen, technieken en onderhoud in onze uitgebreide gids." />
-        <meta name="keywords" content="tegels gids, tegelwerken handleiding, tegels plaatsen, vloertegels, wandtegels, badkamertegels" />
-      </Helmet>
+      <SEOHead />
 
       <Navbar />
       

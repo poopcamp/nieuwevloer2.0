@@ -21,7 +21,7 @@ const Guides = () => {
           name="keywords" 
           content="tegelgids,vloergids,tegelwerk,badkamerrenovatie,checklists,tips tegel,Maldegem,Eeklo,Knokke" 
         />
-        <link rel="canonical" href="https://nieuwetegels.be/gidsen" />
+        <link rel="canonical" href="https://nieuwetegels.be/gidsen/" />
       </Helmet>
       
       <Navbar />
